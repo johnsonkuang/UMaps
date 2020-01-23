@@ -22,7 +22,6 @@ allprojects {
     options.tags = ["spec.modifies:a:Modifies:", "spec.effects:a:Effects:",
                     "spec.requires:a:Requires:", "spec.specfield:a:Specfield:",
                     "spec.derivedfield:a:Derived Field:"]
-    options.addBooleanOption "-no-module-directories", true
   }
 
   compileJava {
