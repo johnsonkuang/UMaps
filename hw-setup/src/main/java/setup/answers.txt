@@ -1,16 +1,16 @@
 CSE 331 Homework - "Setup"
 Edit this file to supply your answers.
 
-Name:  <replace this with your name>
+Name:  Johnson Kuang
 
 Problem 6.
 
-(a)
+(a) The method received a negative number, it is resolved when we address the second test.
 
 
-(b)
+(b) The method checked for n <= 0 and thus did not terminate correctly. Changing to n < 0 in the base case resolves this issue.
 
 
-(c)
+(c) The method checked for n <= 2 and subtracted the terms instead of adding them. Changing to check for n <= 1 and adding the terms resolves these issues.
 
 
