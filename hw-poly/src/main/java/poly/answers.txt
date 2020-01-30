@@ -1,48 +1,132 @@
 CSE 331 Homework - Poly.  Answers to written questions.
 Edit this file to supply your answers.
 
-Name:  <replace this with your name>
+Name:  Johnson Kuang
 
 **************************
 *****     Part 0     *****
 **************************
 
-(1)
+(1) r = p * q:
+    set r = q by making a term-by-term copy of all terms in q to r
+    {Inv: r = q * p_0 + q * p_1 + ... + q * p_i-1, where p_j is the jth term in p}
+        foreach term, t_p in p:
+            foreach term, t_r in r:
+                sum together the product of t_p and t_r
+            once all the sums for individual terms, t_p, have been computed, the total
+            product will be the sum of all the individual products of t_p and q.
+
+(2) r = p / q;
+    define a variable s and set s = p by making a term-by-term copy of all terms in p to s
+    define a variable t and set t = q by making a term-by-term copy of all terms in q to t
+
+    {Inv: p_pre = t * r + s}
+    While t and s have the same amount of terms:
+        find the quotient of highest degree terms of s and t respectively and set this to t_r
+            foreach term, t_t in t:
+                if any term, t_s, in s has the same degree as t_r * t_t:
+                    replace t_s with the difference of t_s and t_r * t_t
+                else:
+                    insert -1 * t_r * t_t into s
+            insert t_r into r
 
 
-(2)
-
-
-(3)
-
-
+(3) (x^3 + x - 1) / (x + 1) = x^2 - x + 2
+    p = (x^3 + x - 1)
+    q = (x + 1)
+    s = (x^3 + x - 1)
+    t = (x + 1)
+    while t and s have the same amount of terms:
+        Iteration 1:
+            t_r = x^3 / x = x^2
+            foreach term, t_t in t:
+                Iteration 1 (t_t = x)
+                    if any term, t_s, in s has the same degree as t_r * t_t (x^2 * x = x^3), YES
+                        then replace t_s with the difference of t_s and t_r * t_t, now t_s in s = x^3 - x^3 = 0
+                    else:
+                        insert -1 * t_r * t_t into s
+                Iteration 2 (t_t = 1)
+                    if any term, t_s, in s has the same degree as t_r * t_t (x^2 * 1 = x^2), NO
+                        then replace t_s with the difference of t_s and t_r * t_t=
+                    else:
+                        insert -1 * x^2 into s
+            insert t_r, x^2, into r
+            s = -x^2 + x - 1
+            t = x + 1
+            r = x^2
+        Iteration 2:
+            t_r = -x^2 / x = -x
+            foreach term, t_t in t:
+                Iteration 1 (t_t = x)
+                    if any term, t_s, in s has the same degree as t_r * t_t (-x * x = -x^2), YES
+                        then replace t_s with the difference of t_s and t_r * t_t, now t_s in s = -x^2 + x^2 = 0
+                    else:
+                        insert -1 * t_r * t_t into s
+                Iteration 2 (t_t = 1)
+                    if any term, t_s, in s has the same degree as t_r * t_t (-x * 1 = -x), YES
+                        then replace t_s with the difference of t_s and t_r * t_t, now t_s in s = x + x = 2x
+                    else:
+                        insert -1 * t_r * t_t into s
+            insert t_r, -x, into r
+            s = 2x - 1
+            t = x + 1
+            r = x^2 - x
+        Iteration 3:
+            t_r = 2x / x = 2
+            foreach term, t_t in t:
+                Iteration 1 (t_t = x)
+                    if any term, t_s, in s has the same degree as t_r * t_t (2 * x = 2x), YES
+                        then replace t_s with the difference of t_s and t_r * t_t, now t_s in s = 2x - 2x = 0
+                    else:
+                        insert -1 * t_r * t_t into s
+                Iteration 2 (t_t = 1)
+                    if any term, t_s, in s has the same degree as t_r * t_t (2 * 1 = 2), YES
+                        then replace t_s with the difference of t_s and t_r * t_t, now t_s in s = -1 - 2 = -3
+                    else:
+                        insert -1 * t_r * t_t into s
+            insert t_r, -x, into r
+            s = -3
+            t = x + 1
+            r = x^2 - x + 2
+    we are done, r = x^2 - x + 2
 **************************
 *****     Part 1     *****
 **************************
 
-(1)
+(1) The RatNum(int n, int d) constructor would not need to include the gcd code. It would save minimal work because
+the gcd() method is fairly efficient. The CheckRep() would not need to include checks for the lowest form, saving the calculation
+of the gcd again. The toString() method must include the gcd code because the RatNum is no longer required to be reduced, a disadvantage
+for this implementation is that the code for toString becomes much less clear. Equals() and HashCode would also change.
 
 
-(2)
+(2) RatNum is an immutable object, therefore the fields should not be changed. In all of the operations, we changed the state of "this" but did
+not include a @spec.effects clause to signify this change. There is also a lack of a @spec.modifies clause.
 
-
-(3)
-
+(3) Since the fields are final and RatNum is an immutable object, we only need to call checkRep() at the end of the construction of the object when the fields
+are initialized. There are no mutator methods in RatNum. Add, sub, mul, and div don't mutate the current object, instead they create new RatNum objects which
+don't affect the fields of "this". Thus checking the rep invariant is not required following the initialization of the RatNum object.
 
 **************************
 *****     Part 2     *****
 **************************
 
-(1)
+(1) CheckRep() should only be called at the end of the constructor in RatTerm. Because the fields of RatTerm should be immutable and the operation methods
+produce new instances of RatTerm, the only time we have to enforce the rep invariant is at the end of initialization.
 
 
-(2)
+(2) The constructor would not need to enforce a zero exponent, this has minor performance enhancements and boosts the clarity of code in the constructor.
+Any method that involves operations with the expt field will also be changed: mul(), div(), differentiate(), antidifferentiate(). These methods would consistently
+increase the value of the expt for the zero term which may eventually lead to memory issues if the rep invariant was weakened. In addition, the toString method must
+check for zero terms on entry to adhere to the given spec which affects code clarity and execution.
 
 
-(3)
+(3) Only the constructor and isNaN() will change. The constructor will have to include a check for NaN and explicitly set the exponent to 0 to enforce the rep invariant.
+isNaN() must also check to make sure that the exponent is 0 in order for the RatTerm to be a NaN.
 
 
-(4)
+(4) Implement both rep invariants because there are cases where the exponent could overflow from repeated operations with the '0' term, and there
+it makes more semantical sense for RatTerm ZERO to also have a 0 exponent. In addition the same operation can be performed on a NaN RatTerm on initialization as well.
+Enforcing both would make more semantical sense.
 
 
 **************************
