@@ -1,0 +1,25 @@
+CSE 331 Homework.  Answers to written questions.
+Edit this file to supply your answers.
+
+Name:  <replace this with your name>
+
+Part 1. (Written exercises)
+
+(a)
+
+
+(b)
+
+
+(c)
+
+
+Part 2.  (Graph interface/operations)
+
+
+
+Part 3.  (Testing strategy)
+
+
+
+
