@@ -18,16 +18,15 @@ Name:  Johnson Kuang
 
 (2) r = p / q;
     define a variable s and set s = p by making a term-by-term copy of all terms in p to s
-    define a variable t and set t = q by making a term-by-term copy of all terms in q to t
 
-    {Inv: p_pre = t * r + s}
-    While t and s have the same amount of terms:
-        find the quotient of highest degree terms of s and t respectively and set this to t_r
-            foreach term, t_t in t:
-                if any term, t_s, in s has the same degree as t_r * t_t:
-                    replace t_s with the difference of t_s and t_r * t_t
+    {Inv: p_pre = q * r + s}
+    While the highest degree term in s is > than that of q's:
+        find the quotient of highest degree terms of s and q respectively and set this to t_r
+            foreach term, t_q in q:
+                if any term, t_s, in s has the same degree as t_r * q:
+                    replace t_s with the difference of t_s and t_r * q
                 else:
-                    insert -1 * t_r * t_t into s
+                    insert -1 * t_r * q into s
             insert t_r into r
 
 
@@ -36,57 +35,57 @@ Name:  Johnson Kuang
     q = (x + 1)
     s = (x^3 + x - 1)
     t = (x + 1)
-    while t and s have the same amount of terms:
+    while q and s have the same amount of terms:
         Iteration 1:
             t_r = x^3 / x = x^2
-            foreach term, t_t in t:
-                Iteration 1 (t_t = x)
-                    if any term, t_s, in s has the same degree as t_r * t_t (x^2 * x = x^3), YES
-                        then replace t_s with the difference of t_s and t_r * t_t, now t_s in s = x^3 - x^3 = 0
+            foreach term, t_q in q:
+                Iteration 1 (t_q = x)
+                    if any term, t_s, in s has the same degree as t_r * t_q (x^2 * x = x^3), YES
+                        then replace t_s with the difference of t_s and t_r * t_q, now t_s in s = x^3 - x^3 = 0
                     else:
-                        insert -1 * t_r * t_t into s
-                Iteration 2 (t_t = 1)
-                    if any term, t_s, in s has the same degree as t_r * t_t (x^2 * 1 = x^2), NO
-                        then replace t_s with the difference of t_s and t_r * t_t=
+                        insert -1 * t_r * q into s
+                Iteration 2 (t_q = 1)
+                    if any term, t_s, in s has the same degree as t_r * t_q (x^2 * 1 = x^2), NO
+                        then replace t_s with the difference of t_s and t_r * t_q = 0
                     else:
                         insert -1 * x^2 into s
             insert t_r, x^2, into r
             s = -x^2 + x - 1
-            t = x + 1
+            q = x + 1
             r = x^2
         Iteration 2:
             t_r = -x^2 / x = -x
-            foreach term, t_t in t:
-                Iteration 1 (t_t = x)
-                    if any term, t_s, in s has the same degree as t_r * t_t (-x * x = -x^2), YES
-                        then replace t_s with the difference of t_s and t_r * t_t, now t_s in s = -x^2 + x^2 = 0
+            foreach term, t_q in q:
+                Iteration 1 (t_q = x)
+                    if any term, t_s, in s has the same degree as t_r * t_q (-x * x = -x^2), YES
+                        then replace t_s with the difference of t_s and t_r * t_q, now t_s in s = -x^2 + x^2 = 0
                     else:
-                        insert -1 * t_r * t_t into s
-                Iteration 2 (t_t = 1)
-                    if any term, t_s, in s has the same degree as t_r * t_t (-x * 1 = -x), YES
-                        then replace t_s with the difference of t_s and t_r * t_t, now t_s in s = x + x = 2x
+                        insert -1 * t_r * t_q into s
+                Iteration 2 (t_q = 1)
+                    if any term, t_s, in s has the same degree as t_r * t_q (-x * 1 = -x), YES
+                        then replace t_s with the difference of t_s and t_r * t_q, now t_s in s = x + x = 2x
                     else:
-                        insert -1 * t_r * t_t into s
+                        insert -1 * t_r * t_q into s
             insert t_r, -x, into r
             s = 2x - 1
-            t = x + 1
+            q = x + 1
             r = x^2 - x
         Iteration 3:
             t_r = 2x / x = 2
-            foreach term, t_t in t:
-                Iteration 1 (t_t = x)
-                    if any term, t_s, in s has the same degree as t_r * t_t (2 * x = 2x), YES
-                        then replace t_s with the difference of t_s and t_r * t_t, now t_s in s = 2x - 2x = 0
+            foreach term, t_q in q:
+                Iteration 1 (t_q = x)
+                    if any term, t_s, in s has the same degree as t_r * t_q (2 * x = 2x), YES
+                        then replace t_s with the difference of t_s and t_r * t_q, now t_s in s = 2x - 2x = 0
                     else:
-                        insert -1 * t_r * t_t into s
-                Iteration 2 (t_t = 1)
-                    if any term, t_s, in s has the same degree as t_r * t_t (2 * 1 = 2), YES
-                        then replace t_s with the difference of t_s and t_r * t_t, now t_s in s = -1 - 2 = -3
+                        insert -1 * t_r * t_q into s
+                Iteration 2 (t_q = 1)
+                    if any term, t_s, in s has the same degree as t_r * t_q (2 * 1 = 2), YES
+                        then replace t_s with the difference of t_s and t_r * t_q, now t_s in s = -1 - 2 = -3
                     else:
                         insert -1 * t_r * t_t into s
             insert t_r, -x, into r
             s = -3
-            t = x + 1
+            q = x + 1
             r = x^2 - x + 2
     we are done, r = x^2 - x + 2
 **************************
@@ -133,9 +132,30 @@ Enforcing both would make more semantical sense.
 *****     Part 3     *****
 **************************
 
-(1)
+(1) We checkRep at the end of all the constructors, beginning and end of every observer and creator method. We don't check
+at the end of sortedInsert because it is a private helper method that is not intended to interact with object state. By checking
+the rep invariant at every point where the state of the object has been accessed, we ensure immutability of the class as well as
+enforce the rep invariant.
 
 
-(2)
+(2) Representation 2 is advantageous for fast lookup for coefficients and degrees. It also stores simpler data types as opposed to
+the more complex RatTerm object. However, it is disadvantageous because it is comparatively difficult to maintain the sorted order of
+the two lists, as opposed to the RatTerm list of Representation 1. I believe Representation 1 is still better because the terms are easier
+to maintain sorted order and require less operations to modify.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

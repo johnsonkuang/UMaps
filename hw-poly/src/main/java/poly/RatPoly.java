@@ -88,11 +88,11 @@ public final class RatPoly {
      * @spec.effects Constructs a new Poly equal to "rt". If rt.isZero(), constructs a "0" polynomial.
      */
     public RatPoly(RatTerm rt) {
-        // TODO: Fill in this method, then remove the RuntimeException
         terms = new ArrayList<>();
         if(!rt.isZero()){
             terms.add(rt);
         }
+        checkRep();
     }
 
     /**
@@ -114,6 +114,11 @@ public final class RatPoly {
      * not make a copy of 'rt'.
      */
     private RatPoly(List<RatTerm> rt) {
+        for(int i = 0; i < rt.size(); i++){
+            if(rt.get(i).isZero()){
+                rt.remove(i);
+            }
+        }
         terms = rt;
         // The spec tells us that we don't need to make a copy of 'rt'
         checkRep();
@@ -126,15 +131,18 @@ public final class RatPoly {
      * @spec.requires !this.isNaN()
      */
     public int degree() {
-        // TODO: Fill in this method, then remove the RuntimeException
+        checkRep();
+        /*
+        For terms t0 ... ti-1, where tj is the jth element of this.terms,
+            degree is the highest degree up to tj
+         */
         int degree = 0;
-        if(terms.size() != 0){
-            for(RatTerm rt: terms){
-                if(degree < rt.getExpt()){
-                    degree = rt.getExpt();
-                }
+        for(RatTerm rt: terms){
+            if(degree < rt.getExpt()){
+                degree = rt.getExpt();
             }
         }
+        checkRep();
         return degree;
     }
 
@@ -147,12 +155,19 @@ public final class RatPoly {
      * @spec.requires !this.isNaN()
      */
     public RatTerm getTerm(int deg) {
-        // TODO: Fill in this method, then remove the RuntimeException
+        checkRep();
+        /*
+        For terms t0 ... ti-1, where tj is the jth element of this.terms,
+            if tj.getExpt() == deg
+                then return tj
+            RatTerm.ZERO otherwise
+         */
         for (RatTerm rt: terms){
             if(rt.getExpt() == deg){
                 return rt;
             }
         }
+        checkRep();
         return RatTerm.ZERO;
     }
 
@@ -162,52 +177,20 @@ public final class RatPoly {
      * @return true if and only if this has some coefficient = "NaN"
      */
     public boolean isNaN() {
-        // TODO: Fill in this method, then remove the RuntimeException
+        checkRep();
+        /*
+        For terms t0 ... ti-1, where tj is the jth element of this.terms,
+            if tj.isNaN()
+                then return true
+            false otherwise
+         */
         for(RatTerm rt: terms){
             if(rt.isNaN()){
                 return true;
             }
         }
+        checkRep();
         return false;
-    }
-
-    /**
-     * Scales coefficients within 'lst' by 'scalar' (helper procedure).
-     *
-     * @param lst    the RatTerms to be scaled
-     * @param scalar the value by which to scale coefficients in lst
-     * @spec.requires lst, scalar != null
-     * @spec.modifies lst
-     * @spec.effects Forall i s.t. 0 <= i < lst.size(), if lst.get(i) = (C . E) then lst_post.get(i) =
-     * (C*scalar . E)
-     * @see RatTerm regarding (C . E) notation
-     */
-    private static void scaleCoeff(List<RatTerm> lst, RatNum scalar) {
-        // TODO: Fill in this method as specified, modify it to your liking, or remove it.
-        // Do not leave this method as-is. You must either use it somehow or remove it.
-        int i = 0;
-        while(i != lst.size()){
-            if(!lst.get(i).isZero() && !lst.get(i).isNaN()){
-                lst.get(i);
-            }
-        }
-    }
-
-    /**
-     * Increments exponents within 'lst' by 'degree' (helper procedure).
-     *
-     * @param lst    the RatTerms whose exponents are to be incremented
-     * @param degree the value by which to increment exponents in lst
-     * @spec.requires lst != null
-     * @spec.modifies lst
-     * @spec.effects Forall i s.t. 0 <= i < lst.size(), if (C . E) = lst.get(i) then lst_post.get(i) =
-     * (C . E+degree)
-     * @see RatTerm regarding (C . E) notation
-     */
-    private static void incremExpt(List<RatTerm> lst, int degree) {
-        // TODO: Fill in this method as specified, modify it to your liking, or remove it.
-        // Do not leave this method as-is. You must either use it somehow or remove it.
-        throw new RuntimeException("RatPoly.incremExpt() is not yet implemented");
     }
 
     /**
@@ -231,14 +214,13 @@ public final class RatPoly {
      * cofind(lst,newTerm.getExpt()) + newTerm.getCoeff())
      */
     private static void sortedInsert(List<RatTerm> lst, RatTerm newTerm) {
-        // TODO: Fill in this method, then remove the RuntimeException
         // Note: Some of the provided code in this class relies on this method working as-specified.
         if(!newTerm.isZero() && !newTerm.isNaN() && lst.size() > 0){
             /*
             Inv: every term with index < i has degree greater than newTerm.getExpt()
              */
             int i = 0;
-            while(lst.get(i).getExpt() > newTerm.getExpt()){
+            while(i < lst.size() && lst.get(i).getExpt() > newTerm.getExpt()){
                 i = i + 1;
             }
             if(i == lst.size()){
@@ -261,19 +243,22 @@ public final class RatPoly {
      * @return a RatPoly equal to "0 - this"; if this.isNaN(), returns some r such that r.isNaN()
      */
     public RatPoly negate() {
-        // TODO: Fill in this method, then remove the RuntimeException
+        checkRep();
         if(this.isNaN()){
-            return NaN;
+            checkRep();
+            return new RatPoly(RatTerm.NaN);
         } else {
             /*
             Every element with index < i is the additive inverse of itself
              */
             int i = 0;
             List<RatTerm> rt = new ArrayList<>(terms);
+
             while(i < rt.size()){
                 rt.set(i, terms.get(i).negate());
                 i = i + 1;
             }
+            checkRep();
             return new RatPoly(rt);
         }
     }
@@ -287,21 +272,34 @@ public final class RatPoly {
      * @spec.requires p != null
      */
     public RatPoly add(RatPoly p) {
-        // TODO: Fill in this method, then remove the RuntimeException
+        checkRep();
         if(this.isNaN() || p.isNaN()) {
-            return this.NaN;
+            return new RatPoly(RatTerm.NaN);
         }
         List<RatTerm> lst = new ArrayList<>(terms);
+        for(int i = 0; i < lst.size(); i++){
+            if(lst.get(i).isZero()){
+                lst.remove(i);
+            }
+        }
         RatPoly r = new RatPoly(lst);
-        int i = 0;
         /*
         Inv: r = q + p0 + p1 + ... + pi-1, where pj is the jth term in p
          */
-        while(i < p.terms.size()){
-            if(!r.getTerm(p.terms.get(i).getExpt()).equals(RatTerm.ZERO)){
-                r.sortedInsert(r.terms, r.getTerm(p.terms.get(i).getExpt()).add(p.terms.get(i)));
+        for(RatTerm tp: p.terms){
+            RatTerm tr = r.getTerm(tp.getExpt());
+            if(tr.isZero()){
+                sortedInsert(lst, tp);
+            } else {
+                r.terms.remove(tr);
+                RatTerm sum = tr.add(tp);
+                if(!sum.isZero()){
+                    sortedInsert(lst, sum);
+                }
             }
+            r = new RatPoly(lst);
         }
+        checkRep();
         return r;
     }
 
@@ -315,7 +313,35 @@ public final class RatPoly {
      */
     public RatPoly sub(RatPoly p) {
         // TODO: Fill in this method, then remove the RuntimeException
-        throw new RuntimeException("RatPoly.sub() is not yet implemented");
+        checkRep();
+        if(this.isNaN() || p.isNaN()){
+            return new RatPoly(RatTerm.NaN);
+        }
+        List<RatTerm> lst = new ArrayList<>(terms);
+        for(int i = 0; i < lst.size(); i++){
+            if(lst.get(i).isZero()){
+                lst.remove(i);
+            }
+        }
+        RatPoly r = new RatPoly(lst);
+        /*
+        Inv: r = q - p0 - p1 - ... - pi-1, where pj is the jth term in p
+         */
+        for(RatTerm tp: p.terms){
+            RatTerm tr = r.getTerm(tp.getExpt());
+            if(tr.isZero()){
+                sortedInsert(lst, tp.negate());
+            } else {
+                r.terms.remove(tr);
+                RatTerm diff = tr.sub(tp);
+                if(!diff.isZero()){
+                    sortedInsert(lst, diff);
+                }
+            }
+            r = new RatPoly(lst);
+        }
+        checkRep();
+        return r;
     }
 
     /**
@@ -328,7 +354,22 @@ public final class RatPoly {
      */
     public RatPoly mul(RatPoly p) {
         // TODO: Fill in this method, then remove the RuntimeException
-        throw new RuntimeException("RatPoly.mul() is not yet implemented");
+        checkRep();
+        if(this.isNaN() || p.isNaN()){
+            return new RatPoly(RatTerm.NaN);
+        }
+        List<RatTerm> q = new ArrayList<>(terms);
+        List<RatTerm> lst = new ArrayList<>();
+        /*
+        {Inv: lst = q * p_0 + q * p_1 + ... + q * p_i-1, where p_j is the jth term in p}
+         */
+        for(RatTerm tp: p.terms){
+            for(RatTerm tq: q){
+                sortedInsert(lst, tq.mul(tp));
+            }
+        }
+        checkRep();
+        return new RatPoly(lst);
     }
 
     /**
@@ -366,7 +407,27 @@ public final class RatPoly {
      */
     public RatPoly div(RatPoly p) {
         // TODO: Fill in this method, then remove the RuntimeException
-        throw new RuntimeException("RatPoly.div() is not yet implemented");
+        checkRep();
+        if(this.isNaN() || p.isNaN() || p.equals(ZERO)){
+            return new RatPoly(RatTerm.NaN);
+        }
+        if(this.terms.size() == 0){
+            return new RatPoly(this.terms);
+        }
+
+        List<RatTerm> lst = new ArrayList<>();
+        RatPoly s = new RatPoly(new ArrayList<RatTerm>(this.terms));
+        /*
+        {Inv: this.terms = s + p * lst}
+         */
+        while(s.terms.size() > 0 &&
+                s.degree() >= p.degree()){
+            RatTerm factor = s.getTerm(s.degree()).div(p.getTerm(p.degree()));
+            lst.add(factor);
+            s = s.sub(p.mul(new RatPoly(factor)));
+        }
+        checkRep();
+        return new RatPoly(lst);
     }
 
     /**
@@ -377,8 +438,18 @@ public final class RatPoly {
      * <p>The derivative of a polynomial is the sum of the derivative of each term.
      */
     public RatPoly differentiate() {
-        // TODO: Fill in this method, then remove the RuntimeException
-        throw new RuntimeException("RatPoly.differentiate() is not yet implemented");
+        checkRep();
+        if(this.isNaN()){
+            checkRep();
+            return new RatPoly(RatTerm.NaN);
+        }
+        List<RatTerm> lst = new ArrayList<>();
+        for(RatTerm t: this.terms){
+            RatTerm res = t.differentiate();
+            if(!res.isZero()) sortedInsert(lst, res);
+        }
+        checkRep();
+        return new RatPoly(lst);
     }
 
     /**
@@ -393,8 +464,19 @@ public final class RatPoly {
      * @spec.requires integrationConstant != null
      */
     public RatPoly antiDifferentiate(RatNum integrationConstant) {
-        // TODO: Fill in this method, then remove the RuntimeException
-        throw new RuntimeException("RatPoly.antiDifferentiate() unimplemented!");
+        checkRep();
+        if(this.isNaN() || integrationConstant.isNaN()){
+            checkRep();
+            return new RatPoly(RatTerm.NaN);
+        }
+        List<RatTerm> lst = new ArrayList<>();
+        for(RatTerm t: this.terms){
+            sortedInsert(lst, t.antiDifferentiate());
+        }
+        RatTerm ic = new RatTerm(integrationConstant, 0);
+        if(!ic.isZero()) sortedInsert(lst, ic);
+        checkRep();
+        return new RatPoly(lst);
     }
 
     /**
@@ -411,8 +493,14 @@ public final class RatPoly {
      * Double.NaN, return Double.NaN.
      */
     public double integrate(double lowerBound, double upperBound) {
-        // TODO: Fill in this method, then remove the RuntimeException
-        throw new RuntimeException("RatPoly.integrate() is not yet implemented");
+        checkRep();
+        if(this.isNaN() || Double.isNaN(lowerBound) || Double.isNaN(upperBound)){
+            checkRep();
+            return Double.NaN;
+        }
+        checkRep();
+        return this.antiDifferentiate(RatNum.ZERO).eval(upperBound)
+                - this.antiDifferentiate(RatNum.ZERO).eval(lowerBound);
     }
 
     /**
@@ -423,8 +511,19 @@ public final class RatPoly {
      * is 5, and "x^2-x" evaluated at 3 is 6. If (this.isNaN() == true), return Double.NaN.
      */
     public double eval(double d) {
-        // TODO: Fill in this method, then remove the RuntimeException
-        throw new RuntimeException("RatPoly.eval() is not yet implemented");
+        checkRep();
+        double res = 0.0;
+        /*
+        For terms t0 ... ti-1, where tj is the jth element of this.terms,
+            res = the sum of tj.eval(d) if tj.eval(d) != Double.NaN
+         */
+        for(RatTerm t: this.terms){
+            if(!Double.isNaN(t.eval(d))){
+                res = res + t.eval(d);
+            }
+        }
+        checkRep();
+        return res;
     }
 
     /**
