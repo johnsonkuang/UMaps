@@ -6,13 +6,39 @@ Name:  <replace this with your name>
 Part 1. (Written exercises)
 
 (a)
+    (i) IntQueue1:
+            Abstraction Function:
+                IntQueue1, q1, represents an enqueued series of numbers [n_1, n_2 ... n_k] where n1 is the least-recently added item, and
+                nk is the most-recently added item;
+                append(n_k) = [] if n_k is null
+                               append(n_k-1) : n_k if n_k != null
 
+             Rep Invariant:
+                entries != null
+    (ii) IntQueue2:
+            Abstraction Function:
+                IntQueue2, q2, represents an enqueued series of numbers [n_1, n_2 ... n_k] where n1 is the least-recently added item, and
+                nk is the most-recently added item;
+                append(n_k) = [] if n_k is null
+                               append(n_k-1) : n_k if n_k != null
 
-(b)
+            Rep Invariant:
+                entries != null &&
+                0 <= front < entries.length &&
+                size <= entries.length
+
+(b) Group 1: A, D, G | Group 2: B, H | Group 3: C, F | Group 4: E
 
 
 (c)
-
+    (i) The method does not expose representation because it returns a primitive int type.
+    (ii) The method could have returned a reference to an internal field, so it exposed representation.
+    (iii) The method is a private method within the class therefore it does not expose representation.
+    (iv) The method returns a string, which is immutable, therefore it does not expose representation.
+    (v) Iterators are immutable but the objects you're iterating through are, however since you're iterating through Integers which are
+        immutable, it does not expose representation.
+    (vi) Depending on if the cards parameter is used as an internal field, this method exposes representation because the client
+         can modify the list via cards to change the cards stored in the Deck object.
 
 Part 2.  (Graph interface/operations)
 
