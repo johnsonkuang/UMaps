@@ -1,0 +1,10 @@
+# Testing Add Multiple Nodes
+# Tests that multiple nodes can be added into a created graph
+
+# Create a graph
+created graph graph1
+
+# Add three nodes to the graph
+added n1 to graph1
+added n2 to graph1
+added n3 to graph1

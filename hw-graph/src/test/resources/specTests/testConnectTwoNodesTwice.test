@@ -1,0 +1,17 @@
+# Test two different connections between nodes
+# Test whether two edges with different labels can be made between
+# two nodes in a graph
+
+# Create graph
+CreateGraph graph1
+
+# Add two nodes
+AddNode graph1 A
+AddNode graph1 B
+
+# Add two edges with A as the parent and B as the child
+AddEdge graph1 A B e1
+AddEdge graph1 A B e2
+
+# List the children of A, should contain B twice
+ListChildren graph1 A

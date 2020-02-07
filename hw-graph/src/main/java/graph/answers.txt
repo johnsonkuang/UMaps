@@ -35,8 +35,8 @@ Part 1. (Written exercises)
     (ii) The method could have returned a reference to an internal field, so it exposed representation.
     (iii) The method is a private method within the class therefore it does not expose representation.
     (iv) The method returns a string, which is immutable, therefore it does not expose representation.
-    (v) Iterators are immutable but the objects you're iterating through are, however since you're iterating through Integers which are
-        immutable, it does not expose representation.
+    (v) Iterators are immutable but the objects you're iterating through are. If the iterator was derived from an internal
+        field then it does expose representation. Otherwise it doesn't.
     (vi) Depending on if the cards parameter is used as an internal field, this method exposes representation because the client
          can modify the list via cards to change the cards stored in the Deck object.
 
