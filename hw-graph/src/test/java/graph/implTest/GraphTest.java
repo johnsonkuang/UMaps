@@ -129,6 +129,7 @@ public class GraphTest {
         assertTrue("Edge could not be added when both nodes were in the graph", edgeTest.addEdge(nodes[1], nodes[2], "e1"));
         assertTrue("Edge could not be added when both nodes are in the graph and the label is different", edgeTest.addEdge(nodes[1], nodes[2], "e2"));
         assertFalse("Edge with the same label already exists in the graph", edgeTest.addEdge(nodes[1], nodes[2], "e1"));
+        assertFalse("Edge cannot be made with node not in the graph", edgeTest.addEdge(nodes[1], nodes[3], "e2"));
     }
 
     @Test
