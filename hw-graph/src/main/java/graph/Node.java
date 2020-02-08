@@ -20,7 +20,7 @@ public final class Node {
      * @param end child node of edge
      * @param label label of new edge
      * @return true if added successfully, false otherwise
-     * @spec.requires newEdge != null
+     * @spec.requires end != null
      * @spec.modifies this.edges
      * @spec.effects this.edges.contains(newEdge)
      */
@@ -28,6 +28,4 @@ public final class Node {
         // TODO: Fill in this method, then remove the RuntimeException
         throw new RuntimeException("Method has not been implemented");
     }
-
-
 }

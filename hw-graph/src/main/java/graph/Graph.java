@@ -64,7 +64,7 @@ public final class Graph{
      * @param end the child node
      * @param label the label of this edge
      * @return true if successfully added, false otherwise
-     * @spec.requires start != null && end != null && !contains(edges, newEdge, label) && this graph.contains(start)
+     * @spec.requires start != null &amp;&amp; end != null &amp;&amp; !contains(edges, newEdge, label) &amp;&amp; this graph.contains(start)
      *                this graph.contains(end)
      * @spec.modifies start, newEdge
      * @spec.effects creates a new edge, newEdge, and adds it into the set of edges stored in 'start'
@@ -76,7 +76,11 @@ public final class Graph{
 
     /**
      * Lists out all nodes in the graph in alphabetical order
-     * @return a string representation of all the nodes in the graph
+     * @return a string representation of all the nodes in the graph in lexicographical order
+     * with the output as follows
+     *          Nodes: <i>NodeLabel</i> <i>NodeLabel</i> <i>NodeLabel</i>
+     *          if graph is empty, do not include space following colon
+     *          nodes should be in lexicographical order separated by one space each with no ending space
      */
     public String listNodes(){
         // TODO: Fill in this method, then remove the RuntimeException
@@ -86,7 +90,7 @@ public final class Graph{
     /**
      * Lists out all the child nodes of a single node
      *
-     * <p>Format: the children of parentNode in graphName are:
+     * <p>Format: the children of <i>parentNode</i>:
      * and is followed, on the same line, by a space-separated list of entries of the form node(edgeLabel),
      * where node is a node in graphName to which there is an edge from parentNode and edgeLabel is the label on that
      * edge. If there are multiple edges between two nodes, there should be a separate node(edgeLabel) entry for each edge.
@@ -99,30 +103,6 @@ public final class Graph{
      *
      */
     public String listChildren(Node parent){
-        // TODO: Fill in this method, then remove the RuntimeException
-        throw new RuntimeException("Method has not been implemented");
-    }
-
-    /**
-     * Standard equality operation.
-     *
-     * @param obj the object to be compared for equality
-     * @return true if and only if 'obj' is an instance of a Graph and 'this' and 'obj' represent
-     * the same graph.
-     */
-    @Override
-    public boolean equals(Object obj) {
-        // TODO: Fill in this method, then remove the RuntimeException
-        throw new RuntimeException("Method has not been implemented");
-    }
-
-    /**
-     * Standard hashCode function.
-     *
-     * @return an int that all objects equal to this will also return
-     */
-    @Override
-    public int hashCode() {
         // TODO: Fill in this method, then remove the RuntimeException
         throw new RuntimeException("Method has not been implemented");
     }
