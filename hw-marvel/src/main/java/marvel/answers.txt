@@ -1,0 +1,9 @@
+CSE 331 Homework.  Answers to written questions.
+Edit this file to supply your answers.
+
+Name:  <replace this with your name>
+
+Briefly describe any changes made to your Graph ADT from previous assignments,
+and why those changes were made below. If you made no changes, state that
+explicitly. (See the marvel assignment spec for details.)
+
