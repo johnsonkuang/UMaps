@@ -2,7 +2,7 @@
 # Tests that a single node can be added to a created graph
 
 # Create a graph
-created graph1
+created graph graph1
 
 # Add a node
-added graph1 n1
+added node n1 to graph1

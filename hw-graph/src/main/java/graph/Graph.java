@@ -8,31 +8,36 @@ import java.util.*;
  */
 
 public final class Graph{
+    /**
+     * Abstract Function:
+     * AF(this): a collection of nodes and edges where all the nodes are given by
+     *              {n_1, n_2, n_3...n_n} and all edges are given by {n_1.edges(), n_2.edges() ... n_n.edges()}
+     *
+     * Rep Invariant:
+     *      nodes != null &&
+     *      all elements in nodes != null
+     *      no nodes in nodes have the same label
+     */
+
+    /**
+     * setting for expensive (runtime O(n) or above checks in Graph ADT
+     */
+    private static final boolean DEBUG = false;
+    private Set<Node>  nodes;
 
     /**
      * @spec.effects Constructs an empty graph
      */
     public Graph(){
-        // TODO: Fill in this method, then remove the RuntimeException
-        throw new RuntimeException("Method has not been implemented");
-    }
-
-    /**
-     * @param nodes a list of nodes to be contained in the new Graph, all node contained in
-     *              'nodes' must be initialized. Nodes can have connections initialized as well.
-     * @spec.effects Constructs a new Graph using 'nodes' as part of the graph.
-     */
-    public Graph(List<Node> nodes) {
-        // TODO: Fill in this method, then remove the RuntimeException
-        throw new RuntimeException("Method has not been implemented");
+        nodes = new LinkedHashSet<>();
+        checkRep();
     }
 
     /**
      * @return a list of all the nodes in this graph, if the graph is empty return an empty list
      */
-    public List<Node> getNodes(){
-        // TODO: Fill in this method, then remove the RuntimeException
-        throw new RuntimeException("Method has not been implemented");
+    public Set<Node> getNodes(){
+        return Collections.unmodifiableSet(nodes);
     }
 
     /**
@@ -47,8 +52,11 @@ public final class Graph{
      *
      */
     public boolean addNode(Node n){
-        // TODO: Fill in this method, then remove the RuntimeException
-        throw new RuntimeException("Method has not been implemented");
+        assert n != null: "Trying to add null into the graph";
+        checkRep();
+        boolean success = nodes.add(n);
+        checkRep();
+        return success;
     }
 
     /**
@@ -70,40 +78,37 @@ public final class Graph{
      * @spec.effects creates a new edge, newEdge, and adds it into the set of edges stored in 'start'
      */
     public boolean addEdge(Node start, Node end, String label){
-        // TODO: Fill in this method, then remove the RuntimeException
-        throw new RuntimeException("Method has not been implemented");
+        checkRep();
+        if(nodes.contains(start) && nodes.contains(end)){
+            return start.addEdge(end, label);
+        }
+        return false;
     }
 
     /**
-     * Lists out all nodes in the graph in alphabetical order
-     * @return a string representation of all the nodes in the graph in lexicographical order
-     * with the output as follows
-     *          Nodes: <i>NodeLabel</i> <i>NodeLabel</i> <i>NodeLabel</i>
-     *          if graph is empty, do not include space following colon
-     *          nodes should be in lexicographical order separated by one space each with no ending space
+     * Return a node based on its label
+     * @param label the label of the node
+     * @return the node with the specified label
+     * @throws IllegalArgumentException if node with label 'label' does not exist in nodes
      */
-    public String listNodes(){
-        // TODO: Fill in this method, then remove the RuntimeException
-        throw new RuntimeException("Method has not been implemented");
+    public Node getNode(String label){
+        for(Node n: nodes){
+            if(n.getLabel().equals(label)){
+                return n;
+            }
+        }
+        throw new IllegalArgumentException();
     }
 
-    /**
-     * Lists out all the child nodes of a single node
-     *
-     * <p>Format: the children of <i>parentNode</i>:
-     * and is followed, on the same line, by a space-separated list of entries of the form node(edgeLabel),
-     * where node is a node in graphName to which there is an edge from parentNode and edgeLabel is the label on that
-     * edge. If there are multiple edges between two nodes, there should be a separate node(edgeLabel) entry for each edge.
-     * The nodes should appear in lexicographical (alphabetical) order by node name and secondarily by edge label,
-     * e.g. firstNode(someEdge) secondNode(edgeA) secondNode(edgeB) secondNode(edgeC) thirdNode(anotherEdge). </p>
-     *
-     * @param parent a node in the graph
-     * @return a string representation of all the children of the parent node and their edges
-     * @spec.requires parent != null
-     *
-     */
-    public String listChildren(Node parent){
-        // TODO: Fill in this method, then remove the RuntimeException
-        throw new RuntimeException("Method has not been implemented");
+    private void checkRep(){
+        assert nodes != null : "nodes is null";
+        if(DEBUG) {
+            Set<String> uniqueLabels = new HashSet<>();
+            for(Node n: nodes){
+                assert n != null: "node in nodes is null";
+                assert !uniqueLabels.contains(n.getLabel()): "two edges have the same label";
+                uniqueLabels.add(n.getLabel());
+            }
+        }
     }
 }

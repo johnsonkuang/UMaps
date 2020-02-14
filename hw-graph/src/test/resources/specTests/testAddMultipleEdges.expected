@@ -5,10 +5,10 @@
 created graph graph1
 
 # Add four nodes to the graph
-added n1 to graph1
-added n2 to graph1
-added n3 to graph1
-added n4 to graph1
+added node n1 to graph1
+added node n2 to graph1
+added node n3 to graph1
+added node n4 to graph1
 
 # Add a edge connecting n1 and n2
 added edge A from n1 to n2 in graph1
