@@ -7,3 +7,5 @@ Briefly describe any changes made to your Graph ADT from previous assignments,
 and why those changes were made below. If you made no changes, state that
 explicitly. (See the marvel assignment spec for details.)
 
+Added a contains() method that checks for the existence of a node in the graph, although
+addNode() implicitly checks for nodes, it's better to be explicit in my opinion.

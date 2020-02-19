@@ -100,6 +100,15 @@ public final class Graph{
         throw new IllegalArgumentException();
     }
 
+    /**
+     * Checks whether given node is in the graph
+     * @param n node to check in graph
+     * @return true if found, false otherwise
+     */
+    public boolean containsNode(Node n){
+        return nodes.contains(n);
+    }
+
     private void checkRep(){
         assert nodes != null : "nodes is null";
         if(DEBUG) {

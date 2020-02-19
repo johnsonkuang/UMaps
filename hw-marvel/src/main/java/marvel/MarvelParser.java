@@ -11,10 +11,15 @@
 
 package marvel;
 
+import com.opencsv.CSVReader;
+import com.opencsv.bean.CsvToBeanBuilder;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+
+import java.util.*;
 
 /**
  * Parser utility to load the Marvel Comics dataset.
@@ -29,7 +34,7 @@ public class MarvelParser {
      * @spec.requires filename is a valid file in the resources/data folder.
      */
     // TODO: Replace 'void' with the type you want the parser to produce
-    public static void parseData(String filename) {
+    public static Map<String, Set<String>> parseData(String filename) {
         // You can use this code as an example for getting a file from the resources folder
         // in a project like this. If you access TSV files elsewhere in your code, you'll need
         // to use similar code. If you use this code elsewhere, don't forget:
@@ -48,7 +53,29 @@ public class MarvelParser {
         }
         Reader reader = new BufferedReader(new InputStreamReader(stream));
 
-        // TODO: Complete this method
-        // Hint: You might want to create a new bean class to use with the CSV Parser
+        Iterator<MarvelModel> tsvMarvelIterator =
+                new CsvToBeanBuilder<MarvelModel>(reader) //set input
+                    .withType(MarvelModel.class) // set entry type
+                    .withSeparator('\t') // \t for TSV
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build() // returns a CsvToBean<MarvelModel>
+                    .iterator();
+
+        //maps books to Characters that appears in it
+        //all characters that appear in a specific book require edges made
+        //between them
+
+        //assumes that there are no duplicate character-book re
+        Map<String, Set<String>> marvelCharacters = new HashMap<>();
+        while(tsvMarvelIterator.hasNext()){
+            MarvelModel character = tsvMarvelIterator.next();
+            String bookName = character.getBook();
+            if(!marvelCharacters.containsKey(bookName)){
+                marvelCharacters.put(bookName, new HashSet<>());
+            }
+            String heroName = character.getHero();
+            marvelCharacters.get(bookName).add(heroName);
+        }
+        return marvelCharacters;
     }
 }
