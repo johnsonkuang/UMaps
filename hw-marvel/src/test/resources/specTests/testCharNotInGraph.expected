@@ -1,0 +1,13 @@
+# Tests behavior when one or more nodes are not in the graph
+loaded graph graph
+
+graph contains: 1
+
+the children of 1 in graph are:
+
+unknown character 2
+
+unknown character 2
+
+unknown character 2
+unknown character 3

@@ -1,0 +1,18 @@
+# Tests that on a small-scale graph that all operations work, including loading from a tsv and BFS
+
+LoadGraph graph circularLinkedGraph.tsv
+
+ListChildren graph 1
+ListChildren graph 2
+ListChildren graph 3
+ListChildren graph 4
+
+FindPath graph 1 3
+
+FindPath graph 2 4
+
+FindPath graph 3 1
+
+FindPath graph 4 2
+
+ListNodes graph

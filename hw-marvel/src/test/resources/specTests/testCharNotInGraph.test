@@ -1,0 +1,12 @@
+# Tests behavior when one or more nodes are not in the graph
+LoadGraph graph singleNode.tsv
+
+ListNodes graph
+
+ListChildren graph 1
+
+FindPath graph 1 2
+
+FindPath graph 2 1
+
+FindPath graph 2 3

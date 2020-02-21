@@ -1,7 +1,7 @@
 CSE 331 Homework.  Answers to written questions.
 Edit this file to supply your answers.
 
-Name:  <replace this with your name>
+Name: Johnson Kuangggg
 
 Briefly describe any changes made to your Graph ADT from previous assignments,
 and why those changes were made below. If you made no changes, state that
@@ -9,3 +9,7 @@ explicitly. (See the marvel assignment spec for details.)
 
 Added a contains() method that checks for the existence of a node in the graph, although
 addNode() implicitly checks for nodes, it's better to be explicit in my opinion.
+
+Changed the data structure that stores nodes in Graph from HashSet to a HashMap of the
+String label of the node to the Node object because it leads to faster lookup times for specific
+nodes in the graph based on label.

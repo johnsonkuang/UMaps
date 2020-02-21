@@ -23,21 +23,21 @@ public final class Graph{
      * setting for expensive (runtime O(n) or above checks in Graph ADT
      */
     private static final boolean DEBUG = false;
-    private Set<Node>  nodes;
+    private Map<String, Node>  nodes;
 
     /**
      * @spec.effects Constructs an empty graph
      */
     public Graph(){
-        nodes = new LinkedHashSet<>();
+        nodes = new HashMap<>();
         checkRep();
     }
 
     /**
      * @return a list of all the nodes in this graph, if the graph is empty return an empty list
      */
-    public Set<Node> getNodes(){
-        return Collections.unmodifiableSet(nodes);
+    public Collection<Node> getNodes(){
+        return Collections.unmodifiableCollection(nodes.values());
     }
 
     /**
@@ -51,12 +51,13 @@ public final class Graph{
      * @spec.effects this graph.nodes.contains(n)
      *
      */
-    public boolean addNode(Node n){
+    public void addNode(Node n){
         assert n != null: "Trying to add null into the graph";
         checkRep();
-        boolean success = nodes.add(n);
+        if(!nodes.containsKey(n.getLabel())){
+            nodes.put(n.getLabel(), n);
+        }
         checkRep();
-        return success;
     }
 
     /**
@@ -79,7 +80,7 @@ public final class Graph{
      */
     public boolean addEdge(Node start, Node end, String label){
         checkRep();
-        if(nodes.contains(start) && nodes.contains(end)){
+        if(nodes.containsKey(start.getLabel()) && nodes.containsKey(end.getLabel())){
             return start.addEdge(end, label);
         }
         return false;
@@ -88,16 +89,10 @@ public final class Graph{
     /**
      * Return a node based on its label
      * @param label the label of the node
-     * @return the node with the specified label
-     * @throws IllegalArgumentException if node with label 'label' does not exist in nodes
+     * @return the node with the specified label, null if node with 'label' is not found
      */
     public Node getNode(String label){
-        for(Node n: nodes){
-            if(n.getLabel().equals(label)){
-                return n;
-            }
-        }
-        throw new IllegalArgumentException();
+        return nodes.get(label);
     }
 
     /**
@@ -106,14 +101,14 @@ public final class Graph{
      * @return true if found, false otherwise
      */
     public boolean containsNode(Node n){
-        return nodes.contains(n);
+        return nodes.containsKey(n.getLabel());
     }
 
     private void checkRep(){
         assert nodes != null : "nodes is null";
         if(DEBUG) {
             Set<String> uniqueLabels = new HashSet<>();
-            for(Node n: nodes){
+            for(Node n: nodes.values()){
                 assert n != null: "node in nodes is null";
                 assert !uniqueLabels.contains(n.getLabel()): "two edges have the same label";
                 uniqueLabels.add(n.getLabel());

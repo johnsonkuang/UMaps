@@ -1,0 +1,16 @@
+# tests a graph with no edges
+
+loaded graph graph
+
+graph contains: 1 2 3
+
+the children of 1 in graph are:
+the children of 2 in graph are:
+the children of 3 in graph are:
+
+path from 1 to 2:
+no path found
+path from 2 to 3:
+no path found
+path from 3 to 1:
+no path found

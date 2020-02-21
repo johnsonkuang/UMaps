@@ -1,0 +1,6 @@
+# Simple test for finding path to itself
+LoadGraph graph singleNode.tsv
+
+ListChildren graph 1
+
+FindPath graph 1 1

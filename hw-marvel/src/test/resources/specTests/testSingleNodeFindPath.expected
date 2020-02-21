@@ -1,0 +1,6 @@
+# Simple test for finding path to itself
+loaded graph graph
+
+the children of 1 in graph are:
+
+path from 1 to 1:

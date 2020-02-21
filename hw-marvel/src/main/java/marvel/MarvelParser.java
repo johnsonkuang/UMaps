@@ -13,6 +13,8 @@ package marvel;
 
 import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBeanBuilder;
+import graph.Graph;
+import graph.Node;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -31,10 +33,10 @@ public class MarvelParser {
      * comic book the character appeared in, separated by a tab character
      *
      * @param filename the file that will be read
+     * @return iterator of data set read from the data file
      * @spec.requires filename is a valid file in the resources/data folder.
      */
-    // TODO: Replace 'void' with the type you want the parser to produce
-    public static Map<String, Set<String>> parseData(String filename) {
+    public static Iterator<MarvelModel> parseData(String filename) {
         // You can use this code as an example for getting a file from the resources folder
         // in a project like this. If you access TSV files elsewhere in your code, you'll need
         // to use similar code. If you use this code elsewhere, don't forget:
@@ -57,25 +59,49 @@ public class MarvelParser {
                 new CsvToBeanBuilder<MarvelModel>(reader) //set input
                     .withType(MarvelModel.class) // set entry type
                     .withSeparator('\t') // \t for TSV
-                    .withIgnoreLeadingWhiteSpace(true)
                     .build() // returns a CsvToBean<MarvelModel>
                     .iterator();
 
+        return tsvMarvelIterator;
+    }
+
+    /**
+     * Builds a graph based on data read from a .tsv file
+     * @param tsvMarvelIterator an iterator of MarvelModels read from the .tsv data file
+     * @return Graph initialized to data in the .tsv file
+     * @spec.requires tsvMarvelIterator != null
+     */
+    public static Graph buildGraph(Iterator<MarvelModel> tsvMarvelIterator){
         //maps books to Characters that appears in it
         //all characters that appear in a specific book require edges made
         //between them
 
-        //assumes that there are no duplicate character-book re
-        Map<String, Set<String>> marvelCharacters = new HashMap<>();
+        //assumes that there are no duplicate character-book
+        Graph mCU = new Graph();
+        Map<String, Set<Node>> marvelCharacters = new HashMap<>();
         while(tsvMarvelIterator.hasNext()){
             MarvelModel character = tsvMarvelIterator.next();
             String bookName = character.getBook();
-            if(!marvelCharacters.containsKey(bookName)){
+            if(!marvelCharacters.containsKey(bookName)) {
                 marvelCharacters.put(bookName, new HashSet<>());
             }
+
             String heroName = character.getHero();
-            marvelCharacters.get(bookName).add(heroName);
+            Node hero = new Node(heroName);
+            if(mCU.containsNode(hero)){
+                hero = mCU.getNode(heroName);
+            } else {
+                mCU.addNode(hero);
+            }
+            marvelCharacters.get(bookName).add(hero);
+            for(Node n: marvelCharacters.get(bookName)){
+                if(!hero.equals(n)){
+                    mCU.addEdge(hero, n, bookName);
+                    mCU.addEdge(n, hero, bookName);
+                }
+            }
+
         }
-        return marvelCharacters;
+        return mCU;
     }
 }

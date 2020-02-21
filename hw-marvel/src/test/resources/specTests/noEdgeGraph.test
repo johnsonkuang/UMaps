@@ -1,0 +1,13 @@
+# tests a graph with no edges
+
+LoadGraph graph noEdgeGraph.tsv
+
+ListNodes graph
+
+ListChildren graph 1
+ListChildren graph 2
+ListChildren graph 3
+
+FindPath graph 1 2
+FindPath graph 2 3
+FindPath graph 3 1
