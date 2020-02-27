@@ -71,14 +71,14 @@ public class MarvelParser {
      * @return Graph initialized to data in the .tsv file
      * @spec.requires tsvMarvelIterator != null
      */
-    public static Graph buildGraph(Iterator<MarvelModel> tsvMarvelIterator){
+    public static Graph<String, String> buildGraph(Iterator<MarvelModel> tsvMarvelIterator){
         //maps books to Characters that appears in it
         //all characters that appear in a specific book require edges made
         //between them
 
         //assumes that there are no duplicate character-book
-        Graph mCU = new Graph();
-        Map<String, Set<Node>> marvelCharacters = new HashMap<>();
+        Graph<String, String> mCU = new Graph<>();
+        Map<String, Set<Node<String, String>>> marvelCharacters = new HashMap<>();
         while(tsvMarvelIterator.hasNext()){
             MarvelModel character = tsvMarvelIterator.next();
             String bookName = character.getBook();
@@ -87,14 +87,14 @@ public class MarvelParser {
             }
 
             String heroName = character.getHero();
-            Node hero = new Node(heroName);
+            Node<String, String> hero = new Node<>(heroName);
             if(mCU.containsNode(hero)){
                 hero = mCU.getNode(heroName);
             } else {
                 mCU.addNode(hero);
             }
             marvelCharacters.get(bookName).add(hero);
-            for(Node n: marvelCharacters.get(bookName)){
+            for(Node<String, String> n: marvelCharacters.get(bookName)){
                 if(!hero.equals(n)){
                     mCU.addEdge(hero, n, bookName);
                     mCU.addEdge(n, hero, bookName);

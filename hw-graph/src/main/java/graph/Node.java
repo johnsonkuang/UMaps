@@ -7,7 +7,7 @@ import java.util.*;
  * Abstract value: a Node has a collection of edges represented as
  *                  {e_1, e_2, ... , e_n}
  */
-public final class Node {
+public final class Node<N, E> {
     /**
      * Abstract Function:
      *      AF(this): a un-ordered collection of edges given by this.edges()
@@ -25,7 +25,7 @@ public final class Node {
      * setting for expensive (runtime O(n) or above checks in Graph ADT
      */
     private static final boolean DEBUG = false;
-    private final String label;
+    private final N label;
     private Set<DirectedEdge> edges;
 
     /**
@@ -33,7 +33,7 @@ public final class Node {
      * @param label the label of this node
      * @spec.effects Constructs a new Node labeled 'label'
      */
-    public Node(String label){
+    public Node(N label){
         this.label = label;
         edges = new HashSet<>();
         checkRep();
@@ -51,7 +51,7 @@ public final class Node {
      * Returns the label of this Node
      * @return the label of this node
      */
-    public String getLabel(){
+    public N getLabel(){
         return this.label;
     }
 
@@ -67,8 +67,8 @@ public final class Node {
      * @spec.modifies this.edges
      * @spec.effects this.edges.contains(newEdge)
      */
-    public boolean addEdge(Node end, String label){
-        if(end != null && label.length() > 0){
+    public boolean addEdge(Node<N, E> end, E label){
+        if(end != null && label != null){
             DirectedEdge newEdge = new DirectedEdge(end, label);
             boolean success = edges.add(newEdge);
             checkRep();
@@ -86,10 +86,10 @@ public final class Node {
      */
     @Override
     public boolean equals(Object obj){
-        if(!(obj instanceof Node)){
+        if(!(obj instanceof Node<?, ?>)){
             return false;
         }
-        Node tempNode = (Node) obj;
+        Node<?, ?> tempNode = (Node<?, ?>) obj;
         //Nodes are the same if they have the same label since we enforce an invariant that all nodes in a graph
         //have unique labels
         return this.label.equals(tempNode.label);
@@ -108,12 +108,9 @@ public final class Node {
     private void checkRep(){
         assert edges != null: "edges has not been initialized";
         if(DEBUG) {
-            Set<String> uniqueLabels = new HashSet<>();
-            for(DirectedEdge edge: edges){
+            for(Node<N, E>.DirectedEdge edge: edges){
                 assert edge != null: "edge is null";
                 assert edge.label != null;
-                assert !uniqueLabels.contains(edge.label): "two edges have the same label";
-                uniqueLabels.add(edge.label);
             }
         }
     }
@@ -124,7 +121,7 @@ public final class Node {
      *
      * Spec Field:
      * this.end = the endpoint Node
-     * this.label the label String of this edge
+     * this.label the label of this edge
      */
 
     public class DirectedEdge {
@@ -135,8 +132,8 @@ public final class Node {
          *      label != null
          */
 
-        private final Node end;
-        private final String label;
+        private final Node<N, E> end;
+        private final E label;
 
         /**
          * @param end the child node of the directed edge
@@ -144,7 +141,7 @@ public final class Node {
          * @spec.requires end != null
          * @spec.effects Constructs a new DirectedEdge with a child node 'end' and labeled as 'label'
          */
-        public DirectedEdge(Node end, String label){
+        public DirectedEdge(Node<N, E> end, E label){
             this.end = end;
             this.label = label;
             checkRep();
@@ -154,7 +151,7 @@ public final class Node {
          * Gets the label of this edge
          * @return the label of this edge
          */
-        public String getLabel(){
+        public E getLabel(){
             return this.label;
         }
 
@@ -162,7 +159,7 @@ public final class Node {
          * Gets the end node of this edge
          * @return the end node of this edge
          */
-        public Node getEnd(){
+        public Node<N, E> getEnd(){
             return this.end;
         }
 
@@ -180,10 +177,10 @@ public final class Node {
          */
         @Override
         public boolean equals(Object obj) {
-            if(!(obj instanceof DirectedEdge)){
+            if(!(obj instanceof Node<?, ?>.DirectedEdge)){
                 return false;
             }
-            DirectedEdge edge_obj = (DirectedEdge) obj;
+            Node<?, ?>.DirectedEdge edge_obj = (Node<?, ?>.DirectedEdge) obj;
             return this.label.equals(edge_obj.label) && this.end.equals(edge_obj.end);
         }
 

@@ -10,5 +10,3 @@
 LoadGraph marvel marvel.tsv
 
 FindPath marvel BEAST/HENRY_&HANK&_P WISDOM,_PETER
-
-FindPath marvel IRON_MAN/TONY_STARK A

@@ -10,21 +10,20 @@ import java.util.*;
 import java.util.List;
 
 /**
- * MarvelPaths represents a mutable graph of all the characters
- * in the MCU connected through the issues they appear in together
- *
- * A MarvelPaths is represented by a series of <Char1, Char2> edges:
- *          where Char1, Char2 represent character nodes
- *            and <Char1, Char2> represents the edge in the graph
+ * MarvelPaths performs operations on given graphs
  */
 public class MarvelPaths {
     /**
      * This isn't an ADT, it only has static methods
      */
 
+    /**
+     * Runner method for
+     * @param args System arguments passed in on run
+     */
     public static void main(String[] args) {
         try{
-            Graph MCU = MarvelPaths.createGraph("marvel.tsv");
+            Graph<String, String> MCU = MarvelPaths.createGraph("marvel.tsv");
             String[] verbs = {
                     "punched",
                     "kicked",
@@ -49,22 +48,22 @@ public class MarvelPaths {
                 System.out.println("Input another character\'s name: ");
                 String dest = keyboard.nextLine();
                 try{
-                    List<Node.DirectedEdge> shortestPath = MarvelPaths.findPath(MCU, start, dest);
+                    List<Node<String, String>.DirectedEdge> shortestPath = MarvelPaths.findPath(MCU, start, dest);
                     System.out.println("How " + start + " and " + dest + " got in a fight:");
                     if(shortestPath == null){
                         System.out.println("they didn\'t");
                     } else {
                         String prevHero = start;
-                        for(Node.DirectedEdge e: shortestPath) {
+                        for(Node<String, String>.DirectedEdge e: shortestPath) {
                             System.out.println(prevHero + " " + getRandomVerb(verbs)+ " " + e.getEnd().getLabel() + " in " + e.getLabel());
                             prevHero = e.getEnd().getLabel();
                         }
                     }
                 } catch (Exception e){
-                    if(!MCU.containsNode(new Node(start))){
+                    if(!MCU.containsNode(new Node<String, String>(start))){
                         System.out.println("unknown character " + start);
                     }
-                    if(!MCU.containsNode(new Node(dest))){
+                    if(!MCU.containsNode(new Node<String, String>(dest))){
                         System.out.println("unknown character " + dest);
                     }
                 }
@@ -118,7 +117,7 @@ public class MarvelPaths {
      * @spec.requires fileName is a valid file in the resources/data folder.
      * @spec.throws FileNotFoundException when fileName is not a valid file
      */
-    public static Graph createGraph(String fileName) throws FileNotFoundException {
+    public static Graph<String, String> createGraph(String fileName) throws FileNotFoundException {
         try{
             return MarvelParser.buildGraph(MarvelParser.parseData(fileName));
         } catch(IllegalArgumentException e){
@@ -133,18 +132,18 @@ public class MarvelPaths {
      * @param destString the label of the destination node
      * @return the lexicographically least shortest path between start and destination nodes, returns an empty list if
      *         the start.equals(dest) nodes, returns null if no path between the two nodes could be found
-     * @spec.requires g != null, startString != null, Node(startString) != null && g.contains(Node(startString)),
-     *                           destString != null, Node(destString) != null && g.contains(Node(destString))
+     * @spec.requires g != null, startString != null, Node(startString) != null & g.contains(Node(startString)),
+     *                           destString != null, Node(destString) != null & g.contains(Node(destString))
      * @spec.throws IllegalArgumentException if any of the above clauses are violated
      */
-    public static List<Node.DirectedEdge> findPath(Graph g, String startString, String destString)
+    public static List<Node<String, String>.DirectedEdge> findPath(Graph<String, String> g, String startString, String destString)
                                                 throws IllegalArgumentException{
         if(g == null || startString == null || destString == null){
             throw new IllegalArgumentException();
         }
 
-        Node start = g.getNode(startString);
-        Node dest = g.getNode(destString);
+        Node<String, String> start = g.getNode(startString);
+        Node<String, String> dest = g.getNode(destString);
 
         if(start.equals(dest)){
             return new ArrayList<>();
@@ -155,24 +154,24 @@ public class MarvelPaths {
         }
 
         // data structures initialization
-        Queue<Node> workList = new LinkedList<>();
-        Map<Node, List<Node.DirectedEdge>> visitedPaths = new HashMap<>();
+        Queue<Node<String, String>> workList = new LinkedList<>();
+        Map<Node<String, String>, List<Node<String, String>.DirectedEdge>> visitedPaths = new HashMap<>();
 
         // initial state
         workList.add(start);
         visitedPaths.put(start, new ArrayList<>());
         while(!workList.isEmpty()){
-            Node n = workList.remove();
+            Node<String, String> n = workList.remove();
             if(n.equals(dest)){
                 return visitedPaths.get(n);
             }
             //sort nodes in lexicographically least ordering
-            List<Node.DirectedEdge> lst = sortChildren(n);
+            List<Node<String, String>.DirectedEdge> lst = sortChildren(n);
             //add nodes that have not been processed to the list
-            for(Node.DirectedEdge e: lst){
+            for(Node<String, String>.DirectedEdge e: lst){
                 if(!visitedPaths.containsKey(e.getEnd())){
                     // Add all edges to new path
-                    List<Node.DirectedEdge> new_paths = new ArrayList<>();
+                    List<Node<String, String>.DirectedEdge> new_paths = new ArrayList<>();
                     new_paths.addAll(visitedPaths.get(n));
                     // add current edge to end node
                     new_paths.add(e);
@@ -184,11 +183,11 @@ public class MarvelPaths {
         return null;
     }
 
-    private static List<Node.DirectedEdge> sortChildren(Node n){
-        List<Node.DirectedEdge> lst = new ArrayList<>(n.getEdges());
-        lst.sort(new Comparator<Node.DirectedEdge>() {
+    private static List<Node<String, String>.DirectedEdge> sortChildren(Node<String, String> n){
+        List<Node<String, String>.DirectedEdge> lst = new ArrayList<>(n.getEdges());
+        lst.sort(new Comparator<Node<String, String>.DirectedEdge>() {
             @Override
-            public int compare(Node.DirectedEdge o1, Node.DirectedEdge o2) {
+            public int compare(Node<String, String>.DirectedEdge o1, Node<String, String>.DirectedEdge o2) {
                 if(o1.getEnd().equals(o2.getEnd())){
                     return o1.getLabel().compareTo(o2.getLabel());
                 }

@@ -7,7 +7,7 @@ import java.util.*;
  Nodes and DirectedEdges.
  */
 
-public final class Graph{
+public final class Graph<N extends Object, E>{
     /**
      * Abstract Function:
      * AF(this): a collection of nodes and edges where all the nodes are given by
@@ -23,7 +23,7 @@ public final class Graph{
      * setting for expensive (runtime O(n) or above checks in Graph ADT
      */
     private static final boolean DEBUG = false;
-    private Map<String, Node>  nodes;
+    private Map<? super N, Node<N, E>>  nodes;
 
     /**
      * @spec.effects Constructs an empty graph
@@ -36,7 +36,7 @@ public final class Graph{
     /**
      * @return a list of all the nodes in this graph, if the graph is empty return an empty list
      */
-    public Collection<Node> getNodes(){
+    public Collection<Node<N, E>> getNodes(){
         return Collections.unmodifiableCollection(nodes.values());
     }
 
@@ -51,13 +51,15 @@ public final class Graph{
      * @spec.effects this graph.nodes.contains(n)
      *
      */
-    public void addNode(Node n){
+    public boolean addNode(Node<N, E> n){
         assert n != null: "Trying to add null into the graph";
         checkRep();
         if(!nodes.containsKey(n.getLabel())){
             nodes.put(n.getLabel(), n);
+            return true;
         }
         checkRep();
+        return false;
     }
 
     /**
@@ -78,7 +80,7 @@ public final class Graph{
      * @spec.modifies start, newEdge
      * @spec.effects creates a new edge, newEdge, and adds it into the set of edges stored in 'start'
      */
-    public boolean addEdge(Node start, Node end, String label){
+    public boolean addEdge(Node<N, E> start, Node<N, E> end, E label){
         checkRep();
         if(nodes.containsKey(start.getLabel()) && nodes.containsKey(end.getLabel())){
             return start.addEdge(end, label);
@@ -91,7 +93,7 @@ public final class Graph{
      * @param label the label of the node
      * @return the node with the specified label, null if node with 'label' is not found
      */
-    public Node getNode(String label){
+    public Node<N, E> getNode(N label){
         return nodes.get(label);
     }
 
@@ -107,11 +109,8 @@ public final class Graph{
     private void checkRep(){
         assert nodes != null : "nodes is null";
         if(DEBUG) {
-            Set<String> uniqueLabels = new HashSet<>();
             for(Node n: nodes.values()){
                 assert n != null: "node in nodes is null";
-                assert !uniqueLabels.contains(n.getLabel()): "two edges have the same label";
-                uniqueLabels.add(n.getLabel());
             }
         }
     }
