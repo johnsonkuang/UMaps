@@ -3,9 +3,12 @@ package graph;
 import java.util.*;
 
 /**
- * <b>Node</b> represents a mutable element in the Graph ADT.
- * Abstract value: a Node has a collection of edges represented as
+ *  <b>Node</b> represents a mutable element in the Graph ADT.
+ *  Abstract value: a Node has a collection of edges represented as
  *                  {e_1, e_2, ... , e_n}
+ *
+ * @param <N> Type of the node label
+ * @param <E> Type of the edge label
  */
 public final class Node<N, E> {
     /**
@@ -108,9 +111,12 @@ public final class Node<N, E> {
     private void checkRep(){
         assert edges != null: "edges has not been initialized";
         if(DEBUG) {
+            Set<E> uniqueLabels = new HashSet<>();
             for(Node<N, E>.DirectedEdge edge: edges){
                 assert edge != null: "edge is null";
                 assert edge.label != null;
+                assert !uniqueLabels.contains(edge.label) : "label is not unique";
+                uniqueLabels.add(edge.label);
             }
         }
     }

@@ -3,10 +3,11 @@ package graph;
 import java.util.*;
 
 /**
- <b>Graph</b> represents a mutable directed labeled graph ADT made up of
- Nodes and DirectedEdges.
+ * <b>Graph</b> represents a mutable directed labeled graph ADT made up of
+ *  Nodes and DirectedEdges.
+ * @param <N> Type of the node label
+ * @param <E> Type of the edge label
  */
-
 public final class Graph<N extends Object, E>{
     /**
      * Abstract Function:
@@ -34,7 +35,7 @@ public final class Graph<N extends Object, E>{
     }
 
     /**
-     * @return a list of all the nodes in this graph, if the graph is empty return an empty list
+     * @return a list of all the nodes<N,E></N,E> in this graph, if the graph is empty return an empty list
      */
     public Collection<Node<N, E>> getNodes(){
         return Collections.unmodifiableCollection(nodes.values());
@@ -109,8 +110,14 @@ public final class Graph<N extends Object, E>{
     private void checkRep(){
         assert nodes != null : "nodes is null";
         if(DEBUG) {
-            for(Node n: nodes.values()){
+            Set<N> uniqueLabels = new HashSet<>();
+            for(Node<N, E> n: nodes.values()){
                 assert n != null: "node in nodes is null";
+                for(Node<N, E>.DirectedEdge e : n.getEdges()){
+                    assert e != null : "edge is null";
+                }
+                assert !uniqueLabels.contains(n.getLabel()): "label of node is not unique";
+                uniqueLabels.add(n.getLabel());
             }
         }
     }

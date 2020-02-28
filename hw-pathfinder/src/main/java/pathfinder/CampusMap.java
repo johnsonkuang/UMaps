@@ -34,18 +34,27 @@ public class CampusMap implements ModelAPI {
     // Rep Invariant:
     //      abbrevToLongName != null &&
     //      abbrevToPoint != null &&
-    //      abbrevToLongName does not contain null elements &&
-    //      abbrevToPoint does not contain null elements &&
-    //      campusMap != null &&
-    //      campusMap does not contain null elements
+    //      abbrevToLongName does not contain null keys &&
+    //      abbrevToLongName does not contain null values &&
+    //      abbrevToPoint does not contain null keys &&
+    //      abbrevToPoint does not contain null values &&
 
+    /**
+     * map of short name abbreviations to the long names they represent
+     */
     private Map<String, String> abbrevToLongName;
+
+    /**
+     * map of short name abbreviations to the points they represent
+     */
     private Map<String, Point> abbrevToPoint;
 
     /**
-     *
+     * graph representing campus map
      */
     private Graph<Point, Double> campusMap;
+
+    private static final boolean DEBUG = false;
 
     /**
      * Creates a new CampusMap based on the data in campus_buildings.tsv and campus_paths.tsv.
@@ -87,6 +96,7 @@ public class CampusMap implements ModelAPI {
             campusMap.addEdge(start, end, cp.getDistance());
             campusMap.addEdge(end, start, cp.getDistance());
         }
+        checkRep();
     }
 
     /**
@@ -95,6 +105,7 @@ public class CampusMap implements ModelAPI {
      */
     @Override
     public boolean shortNameExists(String shortName) {
+        checkRep();
         return abbrevToLongName.containsKey(shortName);
     }
 
@@ -105,6 +116,7 @@ public class CampusMap implements ModelAPI {
      */
     @Override
     public String longNameForShort(String shortName) {
+        checkRep();
         if(!abbrevToLongName.containsKey(shortName)){
             throw new IllegalArgumentException();
         }
@@ -116,6 +128,7 @@ public class CampusMap implements ModelAPI {
      */
     @Override
     public Map<String, String> buildingNames() {
+        checkRep();
         return Collections.unmodifiableMap(abbrevToLongName);
     }
 
@@ -132,9 +145,36 @@ public class CampusMap implements ModelAPI {
      */
     @Override
     public Path<Point> findShortestPath(String startShortName, String endShortName) {
+        checkRep();
         return DijkstraUtil.dijkstraSearch(campusMap,
                 abbrevToPoint.get(startShortName),
                 abbrevToPoint.get(endShortName));
+    }
+
+
+    // Rep Invariant:
+    //      abbrevToLongName != null &&
+    //      abbrevToPoint != null &&
+    //      abbrevToLongName does not contain null elements &&
+    //      abbrevToPoint does not contain null elements &&
+    //      campusMap != null &&
+    //      campusMap does not contain null elements
+
+    private void checkRep(){
+        assert abbrevToPoint != null : "abbrevToPoint not initialized";
+        assert abbrevToLongName != null : "abbrevToLongName not initialized";
+        assert campusMap != null : "graph is not initialized";
+
+        if(DEBUG){
+            for(String s : abbrevToPoint.keySet()){
+                assert s != null : "key is null";
+                assert abbrevToPoint.get(s) != null : "value is null";
+            }
+            for (String s : abbrevToLongName.keySet()){
+                assert s != null : "key is null";
+                assert abbrevToLongName.get(s) != null : "value is null";
+            }
+        }
     }
 
 }
