@@ -95,7 +95,7 @@ public class PathfinderTestDriver {
 
     private void findPath(List<String> arguments){
         if(arguments.size() != 3) {
-            throw new CommandException("Bad arguments to LoadGraph: " + arguments);
+            throw new CommandException("Bad arguments to FindPath: " + arguments);
         }
 
         String graphName = arguments.get(0);
@@ -117,6 +117,8 @@ public class PathfinderTestDriver {
                 for(Path<String>.Segment s: shortestPath) {
                     output.println(s.getStart() + " to " + s.getEnd() + " with weight " + String.format("%.3f", s.getCost()));
                 }
+            } else {
+                output.println("path not found");
             }
             output.println("total cost: " + String.format("%.3f", shortestPath.getCost()));
         } catch (Exception e){
