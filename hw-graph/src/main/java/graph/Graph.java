@@ -102,7 +102,7 @@ public final class Graph<N extends Object, E>{
      * @param n node to check in graph
      * @return true if found, false otherwise
      */
-    public boolean containsNode(Node n){
+    public boolean containsNode(Node<N, E> n){
         return nodes.containsKey(n.getLabel());
     }
 
