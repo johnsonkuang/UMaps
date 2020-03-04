@@ -33,8 +33,13 @@ class App extends Component {
         // it'll tell you thinks like what x/y coordinates the click was at. For text
         // box updates, it'll tell you the new contents of the text box, like we're using
         // below:
+        if(Math.min(parseInt(event.target.value)) > 200){
+            alert("Grid Size was too large, it has been reset to 200");
+        } else if(Math.min(parseInt(event.target.value)) < 1){
+            alert("Grid Size was too small, it has been reset to 1");
+        }
         this.setState({
-            gridSize: parseInt(event.target.value)
+            gridSize: Math.max(1, Math.min(parseInt(event.target.value), 200))
         });
     };
 
@@ -43,7 +48,7 @@ class App extends Component {
         return (
             <div>
                 <p id="app-title">Connect the Dots!</p>
-                <GridSizePicker value={this.state.gridSize} onChange={this.updateGridSize}/>
+                <GridSizePicker value={String(this.state.gridSize)} onChange={this.updateGridSize}/>
                 <Grid size={this.state.gridSize} width={canvas_size} height={canvas_size}/>
                 <EdgeList value={""} onChange={(event) => {console.log(event.target.value)}}/>
             </div>

@@ -66,19 +66,32 @@ class Grid extends Component {
         }
         // Draw all the dots.
         let coordinates = this.getCoordinates();
-        for(let coordinate of coordinates) {
-            this.drawCircle(ctx, coordinate);
+        console.log(coordinates);
+        for(let row in coordinates) {
+            for(let col in coordinates[row]){
+                this.drawCircle(ctx, coordinates[row][col]);
+            }
         }
     };
 
     getCoordinates = () => {
-        // A hardcoded 4x4 grid. Probably not going to work when we change the grid size...
-        return [
-            [100, 100], [100, 200], [100, 300], [100, 400],
-            [200, 100], [200, 200], [200, 300], [200, 400],
-            [300, 100], [300, 200], [300, 300], [300, 400],
-            [400, 100], [400, 200], [400, 300], [400, 400]
-        ];
+        let points = [];
+
+        let gridSize = parseInt(this.props.size);
+        let width = parseInt(this.props.width);
+        let height = parseInt(this.props.height);
+
+        let offSetX = width / gridSize / 2;
+        let offsetY = height/gridSize / 2;
+        for(let i = 0; i < gridSize; i++){
+            points.push([]);
+
+            for(let j = 0; j < gridSize; j++){
+                points[i].push([offSetX + i * (width / gridSize), offsetY + j * (height / gridSize)]);
+            }
+        }
+        return points;
+
     };
 
     drawCircle = (ctx, coordinate) => {
@@ -95,7 +108,7 @@ class Grid extends Component {
         return (
             <div id="grid">
                 <canvas ref={this.canvasReference} width={this.props.width} height={this.props.height}/>
-                <p>Current Grid Size: 4</p>
+                <p>Current Grid Size: {(this.props.size) ? this.props.size : "Invalid Input."}</p>
             </div>
         );
     }
