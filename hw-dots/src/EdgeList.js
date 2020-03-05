@@ -23,6 +23,15 @@ import React, {Component} from 'react';
  * value - the value to display in the text area
  */
 class EdgeList extends Component {
+    constructor(props) {
+        super(props);
+        this.edgeRef = React.createRef();
+    }
+
+    updateEdge = () => {
+        this.props.onChange(this.edgeRef);
+    }
+
     render() {
         // IntelliJ might complain about "this.props.onChange" not existing.
         // Don't worry, inside <App /> we're passing something in as an onChange prop, so it exists.
@@ -33,11 +42,12 @@ class EdgeList extends Component {
                 <textarea
                     rows={5}
                     cols={30}
-                    onChange={this.props.onChange}
+                    onChange={this.updateEdge}
                     value={this.props.value}
+                    ref={this.edgeRef}
                 /> <br/>
-                <button onClick={() => {console.log('Draw onClick');}}>Draw</button>
-                <button onClick={() => {console.log('Clear onClick');}}>Clear</button>
+                <button onClick={this.props.onDraw}>Draw</button>
+                <button onClick={this.props.onClear}>Clear</button>
             </div>
         );
     }

@@ -57,21 +57,27 @@ class Grid extends Component {
     }
 
     redraw = () => {
-        let ctx = this.canvasReference.current.getContext('2d');
-        ctx.clearRect(0, 0, this.props.width, this.props.height);
-        // Once the image is done loading, it'll be saved inside our state.
-        // Otherwise, we can't draw the image, so skip it.
-        if (this.state.backgroundImage !== null) {
-            ctx.drawImage(this.state.backgroundImage, 0, 0);
-        }
-        // Draw all the dots.
-        let coordinates = this.getCoordinates();
-        console.log(coordinates);
-        for(let row in coordinates) {
-            for(let col in coordinates[row]){
-                this.drawCircle(ctx, coordinates[row][col]);
+            let ctx = this.canvasReference.current.getContext('2d');
+            ctx.clearRect(0, 0, this.props.width, this.props.height);
+            // Once the image is done loading, it'll be saved inside our state.
+            // Otherwise, we can't draw the image, so skip it.
+            if (this.state.backgroundImage !== null) {
+                ctx.drawImage(this.state.backgroundImage, 0, 0);
             }
-        }
+            // Draw all the dots.
+            let coordinates = this.getCoordinates();
+            for(let row in coordinates) {
+                for(let col in coordinates[row]){
+                    this.drawCircle(ctx, coordinates[row][col]);
+                }
+            }
+            // Draw all the edges
+            let edgeCoordinates = this.props.edgeCoords;
+            edgeCoordinates.forEach((element) => {
+                const coord1 = coordinates[element.x1][element.y1];
+                const coord2 = coordinates[element.x2][element.y2];
+                this.drawEdge(ctx, coord1, coord2, element.color);
+            });
     };
 
     getCoordinates = () => {
@@ -93,6 +99,15 @@ class Grid extends Component {
         return points;
 
     };
+
+    drawEdge = (ctx, coord1, coord2, color) => {
+        ctx.lineWidth = Math.min(3, 100 / this.props.size);
+        ctx.strokeStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(coord1[0], coord1[1]);
+        ctx.lineTo(coord2[0], coord2[1]);
+        ctx.stroke();
+    }
 
     drawCircle = (ctx, coordinate) => {
         ctx.fillStyle = "white";
