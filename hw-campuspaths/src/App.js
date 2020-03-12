@@ -135,11 +135,22 @@ class App extends Component {
                             />
                         </div>
                         <div className={"col-2"}>
-                            <button
-                                className={"btn btn-outline-info"}
-                                onClick={this.getPath}>
-                                Find Path!
-                            </button>
+                            <div style={{margin: "0 5px"}}>
+                                <button
+                                    className={"btn btn-outline-info"}
+                                    onClick={this.getPath}
+                                >
+                                    Find Path!
+                                </button>
+                            </div>
+                            <div style={{margin: "0 5px"}}>
+                                <button
+                                    className={"btn btn-outline-danger"}
+                                    onClick={() => window.location.reload(false)}
+                                >
+                                    Reset
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
