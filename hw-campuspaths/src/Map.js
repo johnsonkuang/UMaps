@@ -23,45 +23,46 @@ class Map extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            backgroundImage: null
-        };
         this.canvas = React.createRef();
     }
 
-    componentDidMount() {
-        // Might want to do something here?
-    }
-
     componentDidUpdate() {
-        // Might want something here too...
+        this.redraw();
     }
 
-    fetchAndSaveImage() {
-        // Creates an Image object, and sets a callback function
-        // for when the image is done loading (it might take a while).
-        let background = new Image();
-        background.onload = () => {
-            this.setState({
-                backgroundImage: background
-            });
-        };
-        // Once our callback is set up, we tell the image what file it should
-        // load from. This also triggers the loading process.
-        background.src = "./campus_map.jpg";
-    }
-
-    drawBackgroundImage() {
-        let canvas = this.canvas.current;
-        let ctx = canvas.getContext("2d");
-        //
-        if (this.state.backgroundImage !== null) { // This means the image has been loaded.
+    drawBackgroundImage(canvas, ctx) {
+        if (this.props.backgroundImage !== null) { // This means the image has been loaded.
             // Sets the internal "drawing space" of the canvas to have the correct size.
-            // This helps the canvas not be blurry.
-            canvas.width = this.state.backgroundImage.width;
-            canvas.height = this.state.backgroundImage.height;
-            ctx.drawImage(this.state.backgroundImage, 0, 0);
+            // This helps the canvas not be blurry
+            canvas.width = this.props.width;
+            canvas.height = this.props.height;
+            ctx.drawImage(this.props.backgroundImage, 0, 0);
         }
+    }
+
+    redraw = () => {
+        let canvas = this.canvas.current;
+        let ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, this.props.width, this.props.height);
+        this.drawBackgroundImage(canvas, ctx);
+
+        //Draw Paths
+        let path = this.props.path;
+        console.log(path);
+        path.forEach(element => {
+           let start = element["start"];
+           let end = element["end"];
+           this.drawPath(ctx, start, end, "red");
+        });
+    }
+
+    drawPath = (ctx, start, end, color) => {
+        ctx.lineWidth = 7
+        ctx.strokeStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(start["x"], start["y"]);
+        ctx.lineTo(end["x"], end["y"]);
+        ctx.stroke();
     }
 
     render() {
