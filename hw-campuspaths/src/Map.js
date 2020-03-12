@@ -67,7 +67,9 @@ class Map extends Component {
 
     render() {
         return (
-            <canvas ref={this.canvas}/>
+            <div style ={{paddingTop: "52px", paddingBottom: "10px"}}>
+                <canvas ref={this.canvas}/>
+            </div>
         )
     }
 }

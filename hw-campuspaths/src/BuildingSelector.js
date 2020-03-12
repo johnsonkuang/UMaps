@@ -7,40 +7,42 @@ import "bootstrap/dist/css/bootstrap.css";
 import "react-widgets/dist/css/react-widgets.css";
 
 /**
- * Handles building selection, passes information up to App
+ * Handles building selection, passes information up to PathApp
  */
 class BuildingSelector extends Component {
     render() {
         return(
-          <div className={"container"}>
+          <div>
               <div className={"row"}>
                   <div className={"col-md-4"}>
-                      <h2>Start: </h2>
+                      <h4>Start: </h4>
                   </div>
                   <div className={"col-md-8"}>
                       <Combobox
+                          dropUp
                           busy={this.props.busy}
                           data={this.props.buildingValues}
+                          value={this.props.startValue}
                           caseSensitive={false}
                           minLength={3}
                           filter={'contains'}
-                          style={{width: "60%"}}
                           onSelect={this.props.handleStart}
                       />
                   </div>
               </div>
-              <div className={"row"}>
+              <div className={"row"} style={{marginTop: "10px"}}>
                   <div className={"col-md-4"}>
-                      <h2>Destination: </h2>
+                      <h4 style={{paddingTop: "5px"}}>Destination: </h4>
                   </div>
                   <div className={"col-md-8    "}>
                       <Combobox
+                          dropUp
                           busy={this.props.busy}
                           data={this.props.buildingValues}
+                          value={this.props.destValue}
                           caseSensitive={false}
                           minLength={3}
                           filter={'contains'}
-                          style={{width: "60%"}}
                           onSelect={this.props.handleDest}
                       />
                   </div>

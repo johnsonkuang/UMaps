@@ -9,8 +9,31 @@
  * author.
  */
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+/* eslint-disable react/jsx-no-comment-textnodes */
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import { BrowserRouter } from "react-router-dom";
+import Main from "./main";
+import NavBar from "./Navbar";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+
+class App extends Component {
+    render() {
+        return (
+            <div>
+                <NavBar />
+                <Main />
+            </div>
+        );
+    }
+}
+
+ReactDOM.render(
+    <BrowserRouter basename="/">
+        <App />
+    </BrowserRouter>,
+    document.getElementById("root")
+);
+
