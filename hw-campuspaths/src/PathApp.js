@@ -150,16 +150,16 @@ class PathApp extends Component {
     handleSubmit = async (event) => {
         event.preventDefault();
 
-        this.sendPath(
+        if(this.sendPath(
             this.state.email,
             this.state.startValue,
             this.state.destValue,
             this.state.path_directions
-        );
+        )){
 
         this.setState({
             formSubmitted: true
-        })
+        })}
     }
 
     getEmailDirections = async () => {
@@ -181,24 +181,38 @@ class PathApp extends Component {
             alert("There was an error contacting the server. Try again later!");
             console.log(e);
         }
+    };
+
+    validateEmail = (mail) =>
+    {
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
+        {
+            return (true)
+        }
+        alert("You have entered an invalid email address!")
+        return (false)
     }
 
     async sendPath(to_email, start, end, path_directions) {
-        let template_params = {
-            "to_email": to_email,
-            "start": start,
-            "end": end,
-            "path_directions": path_directions
-        }
+        if(this.validateEmail(to_email)){
+            let template_params = {
+                "to_email": to_email,
+                "start": start,
+                "end": end,
+                "path_directions": path_directions
+            }
 
-        var service_id = "default_service";
-        var template_id = "uw_campusmap";
-        window.emailjs.send(service_id, template_id, template_params)
-            .then(res => {
-                this.setState({ formEmailSent: true })
-            })
-            // Handle errors here however you like, or use a React error boundary
-            .catch(err => console.error('Failed to send feedback. Error: ', err));
+            var service_id = "default_service";
+            var template_id = "uw_campusmap";
+            window.emailjs.send(service_id, template_id, template_params)
+                .then(res => {
+                    this.setState({ formEmailSent: true })
+                })
+                // Handle errors here however you like, or use a React error boundary
+                .catch(err => console.error('Failed to send feedback. Error: ', err));
+            return true;
+        }
+        return false;
     }
 
     render() {
