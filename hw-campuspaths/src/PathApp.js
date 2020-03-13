@@ -13,7 +13,10 @@ import React, {Component} from 'react';
 import Map from "./Map";
 import BuildingSelector from "./BuildingSelector";
 import { CSSTransition, transit } from "react-css-transition";
+import { Link } from "react-router-dom";
 import { IoIosArrowUp, IoIosArrowDown} from "react-icons/io";
+import { MdEmail, MdRefresh } from "react-icons/md";
+import { FaMapMarkedAlt } from "react-icons/fa";
 
 import "bootstrap/dist/css/bootstrap.css";
 
@@ -31,7 +34,9 @@ class PathApp extends Component {
             destValue: "",
             pathData: {},
             paths: [],
-            footerOn: false
+            footerOn: false,
+            email: "",
+            formEmailSent: false,
         }
     }
 
@@ -96,7 +101,11 @@ class PathApp extends Component {
             fetch("http://localhost:4567/path?start=" + this.state.start + "&dest=" + this.state.dest)
                 .then(response => {
                     if(!response.ok){
-                        alert("Oops something went wrong! Expected: 200, Was: " + response.status);
+                        if(this.state.start === "" || this.state.dest === ""){
+                            alert("你是笨蛋吗？");
+                        } else {
+                            alert("Oops something went wrong! Expected: 200, Was: " + response.status);
+                        }
                         return;
                     }
                     return response.json()
@@ -106,17 +115,22 @@ class PathApp extends Component {
                      * Data processing
                      *  -   Rounding cost
                      */
-                    data["cost"] = Math.round(data["cost"]);
-                    console.log(data);
-                    this.setState({
-                        pathData: data,
-                        paths: data["path"]
-                    });
+                    try{
+                        data["cost"] = Math.round(data["cost"]);
+                        console.log(data);
+                        this.setState({
+                            pathData: data,
+                            paths: data["path"]
+                        });
+                    } catch (e) {
+                        console.log(e);
+                    }
                 })
         } catch (e) {
             alert("There was an error contacting the server.");
             console.log(e);
         }
+        this.getEmailDirections();
     }
 
     handleStartChange = (value) => {
@@ -131,6 +145,60 @@ class PathApp extends Component {
             dest: this.getKeyByValue(this.state.buildings, value),
             destValue: value
         });
+    }
+
+    handleSubmit = async (event) => {
+        event.preventDefault();
+
+        this.sendPath(
+            this.state.email,
+            this.state.startValue,
+            this.state.destValue,
+            this.state.path_directions
+        );
+
+        this.setState({
+            formSubmitted: true
+        })
+    }
+
+    getEmailDirections = async () => {
+        try{
+            fetch("http://localhost:4567/email-directions?start=" + this.state.start + "&dest=" + this.state.dest)
+                .then(response => {
+                    if(!response.ok){
+                        alert("Oops something went wrong with fetching the long emailable path! Expected: 200, Was: " + response.status);
+                        return;
+                    }
+                    return response.json()
+                })
+                .then(data => {
+                    this.setState({
+                        path_directions: data
+                    })
+                })
+        } catch (e) {
+            alert("There was an error contacting the server. Try again later!");
+            console.log(e);
+        }
+    }
+
+    async sendPath(to_email, start, end, path_directions) {
+        let template_params = {
+            "to_email": to_email,
+            "start": start,
+            "end": end,
+            "path_directions": path_directions
+        }
+
+        var service_id = "default_service";
+        var template_id = "uw_campusmap";
+        window.emailjs.send(service_id, template_id, template_params)
+            .then(res => {
+                this.setState({ formEmailSent: true })
+            })
+            // Handle errors here however you like, or use a React error boundary
+            .catch(err => console.error('Failed to send feedback. Error: ', err));
     }
 
     render() {
@@ -169,7 +237,7 @@ class PathApp extends Component {
                             }} key={this.state.footerOn}>
                             <div className={"container"} style={{margin: "20px auto"}}>
                                 <div className={"row"}>
-                                    <div className={"col-8"}>
+                                    <div className={"col-7"}>
                                         <BuildingSelector
                                             busy={this.state.busy}
                                             buildingValues={this.state.buildingValues}
@@ -179,13 +247,13 @@ class PathApp extends Component {
                                             handleDest={this.handleDestChange}
                                         />
                                     </div>
-                                    <div className={"col-2"}>
-                                        <div style={{margin: "5px 0"}}>
+                                    <div className={"col-1"}>
+                                        <div style={{marginTop: "1 px", marginBottom: "10px"}}>
                                             <button
                                                 className={"btn btn-outline-info"}
                                                 onClick={this.getPath}
                                             >
-                                                Find Path!
+                                                <FaMapMarkedAlt/>
                                             </button>
                                         </div>
                                         <div style={{margin: "5px 0"}}>
@@ -193,12 +261,31 @@ class PathApp extends Component {
                                                 className={"btn btn-outline-danger"}
                                                 onClick={() => window.location.reload(false)}
                                             >
-                                                Reset
+                                                <MdRefresh/>
                                             </button>
                                         </div>
                                     </div>
-                                    <div className={"col-2"}>
-
+                                    <div className={"col-3"}>
+                                        <form style={{display: (this.state.paths.length === 0 ? "none" : "block")}}>
+                                            <div className="form-group">
+                                                <input type="email" className="form-control" id="exampleInputEmail1"
+                                                       aria-describedby="emailHelp" placeholder="Enter email" value={this.state.email}
+                                                       onChange={this.onEmailChange}
+                                                />
+                                                {this.state.formEmailSent ? <small>
+                                                    email successfully sent!
+                                                </small>: ""}
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div className={"col-1"}>
+                                        <button
+                                            className={"btn btn-outline-primary"}
+                                            style={{display: (this.state.paths.length === 0 ? "none" : "block")}}
+                                            onClick={this.handleSubmit}
+                                        >
+                                            <MdEmail/>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -208,6 +295,15 @@ class PathApp extends Component {
             </div>
         );
     }
+
+    //updates the email value in the input form
+    onEmailChange = (event) => {
+        this.setState({
+            email: event.target.value
+        })
+    }
+
+
 
     //gets the key in a javascript object based on a value
     //@requires: value must be a valid value in the object.values(object)

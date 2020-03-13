@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.4.1",
+    "framer": "^1.1.7",
     "normalize.css": "^8.0.1",
     "react": "^16.8.6",
     "react-alert": "^6.0.1",

@@ -19,12 +19,10 @@ class NavBar extends Component {
                                     <Link
                                         to="/"
                                         className={
-                                            "nav-item " + (this.props.active === "RA" ? "active" : "")
+                                            "nav-item "
                                         }
                                     >
-                                        <a>
                                             home
-                                        </a>
                                     </Link>
                                 </li>
                                 <li>
@@ -34,7 +32,7 @@ class NavBar extends Component {
                                             "nav-item " + (this.props.active === "RA" ? "active" : "")
                                         }
                                     >
-                                        <a href="">find path</a>
+                                        find path
                                     </Link>
                                 </li>
                             </ul>

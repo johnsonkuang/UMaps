@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Work+Sans');
 
 :root {
-    --background: rgba(0, 0, 0, .85);
+    --background: rgba(255, 255, 255, .85);
 }
 
 *, *::before, *::after {
@@ -99,7 +99,7 @@ nav li{
 }
 
 nav a {
-    color: white;
+    color: #E8D3A2;
     text-decoration: none;
     font-size: 1.2rem;
     opacity: 0;
@@ -107,7 +107,7 @@ nav a {
 }
 
 nav a:hover{
-    color: #00B0F0;
+    color: #363C74;
     text-decoration: none;
 }
 
@@ -174,8 +174,8 @@ nav a:hover{
         content: '';
         display: block;
         height: 5px;
-        background: #00B0F0;
-        position: absolute;
+        background: #363C74;
+        position: relative;
         top: 0;
         left:0;
         right:0;
