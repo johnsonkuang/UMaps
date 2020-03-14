@@ -7,7 +7,9 @@ import "./navbar.css";
 import "bootstrap/dist/css/bootstrap.css";
 
 //Stateless Functional Component
-
+/**
+ * Purely cosmetic navbar that uses <Link> to route between app components
+ */
 class NavBar extends Component {
     render() {
         return (

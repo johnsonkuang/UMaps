@@ -14,19 +14,13 @@ import "./Map.css";
 
 class Map extends Component {
 
-    // NOTE:
-    // This component is a suggestion for you to use, if you would like to.
-    // It has some skeleton code that helps set up some of the more difficult parts
-    // of getting <canvas> elements to display nicely with large images.
-    //
-    // If you don't want to use this component, you're free to delete it.
-
     constructor(props) {
         super(props);
         this.canvas = React.createRef();
     }
 
     componentDidUpdate() {
+        //redraw the canvas everytime the props receive an update
         this.redraw();
     }
 
@@ -48,7 +42,6 @@ class Map extends Component {
 
         //Draw Paths
         let path = this.props.path;
-        console.log(path);
         path.forEach(element => {
            let start = element["start"];
            let end = element["end"];

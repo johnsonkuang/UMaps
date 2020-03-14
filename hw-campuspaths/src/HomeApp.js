@@ -2,34 +2,18 @@ import React, {Component} from 'react';
 import { Frame } from "framer";
 import { IoIosArrowUp, IoIosArrowDown} from "react-icons/io";
 
+/**
+ * This is a purely cosmetic home page that stores no state and performs no functions
+ *
+ * there are four animations:
+ * - a vertical sliding bar
+ * - a horizontal sliding bar
+ * - a stagger effect when letters appear
+ * - a color change effect on the <h1></h1>
+ */
+
+
 class HomeApp extends Component {
-
-    componentDidMount() {
-        this.fetchAndSaveImage();
-    }
-
-    fetchAndSaveImage() {
-        // Creates an Image object, and sets a callback function
-        // for when the image is done loading (it might take a while).
-        let background = new Image();
-        background.onload = () => {
-            this.setState({
-                backgroundImage: background
-            });
-        };
-        // Once our callback is set up, we tell the image what file it should
-        // load from. This also triggers the loading process.
-        background.src = "./campus_map.jpg";
-    }
-
-    getBackgroundImg() {
-        if(this.state.backgroundImage !== null) {
-            return this.state.backgroundImage.src;
-        }
-        return null;
-    }
-
-
     render() {
         const string = Array.from("uw huskymap");
         // Add staggering effect to the children of the container

@@ -23,9 +23,6 @@ class BuildingSelector extends Component {
                           busy={this.props.busy}
                           data={this.props.buildingValues}
                           value={this.props.startValue}
-                          caseSensitive={false}
-                          minLength={3}
-                          filter={'contains'}
                           onSelect={this.props.handleStart}
                       />
                   </div>
@@ -40,9 +37,6 @@ class BuildingSelector extends Component {
                           busy={this.props.busy}
                           data={this.props.buildingValues}
                           value={this.props.destValue}
-                          caseSensitive={false}
-                          minLength={3}
-                          filter={'contains'}
                           onSelect={this.props.handleDest}
                       />
                   </div>
