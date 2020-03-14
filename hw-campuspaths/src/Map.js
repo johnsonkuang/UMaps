@@ -45,13 +45,14 @@ class Map extends Component {
         path.forEach(element => {
            let start = element["start"];
            let end = element["end"];
-           this.drawPath(ctx, start, end, "red");
+           this.drawPath(ctx, start, end);
         });
     }
 
-    drawPath = (ctx, start, end, color) => {
-        ctx.lineWidth = 7
-        ctx.strokeStyle = color;
+    //draws a line based on start and end coordinates, color fixed at red
+    drawPath = (ctx, start, end) => {
+        ctx.lineWidth = 7;
+        ctx.strokeStyle = "red";
         ctx.beginPath();
         ctx.moveTo(start["x"], start["y"]);
         ctx.lineTo(end["x"], end["y"]);
