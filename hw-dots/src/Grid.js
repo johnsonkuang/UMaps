@@ -122,7 +122,7 @@ class Grid extends Component {
     render() {
         return (
             <div id="grid">
-                <canvas ref={this.canvasReference} width={this.props.width} height={this.props.height}/>
+                <canvas ref={this.canvasReference} width={this.props.width} height={this.props.height} />
                 <p>Current Grid Size: {(this.props.size) ? this.props.size : "Invalid Input."}</p>
             </div>
         );

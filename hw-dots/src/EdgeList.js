@@ -34,7 +34,7 @@ class EdgeList extends Component {
 
     render() {
         // IntelliJ might complain about "this.props.onChange" not existing.
-        // Don't worry, inside <App /> we're passing something in as an onChange prop, so it exists.
+        // Don't worry, inside <PathApp /> we're passing something in as an onChange prop, so it exists.
         // IntelliJ just isn't quite smart enough to understand how props work in React.
         return (
             <div id="edge-list">

@@ -14,7 +14,7 @@ import EdgeList from "./EdgeList";
 import Grid from "./Grid";
 import GridSizePicker from "./GridSizePicker";
 
-// Allows us to write CSS styles inside App.css, any any styles will apply to all components inside <App />
+// Allows us to write CSS styles inside PathApp.css, any any styles will apply to all components inside <PathApp />
 import "./App.css";
 
 class App extends Component {

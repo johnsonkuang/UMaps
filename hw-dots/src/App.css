@@ -51,7 +51,7 @@ canvas {
     margin: 2px 5px;
 }
 
-/* Centers the "Connect the Dots!" text, which is in a <p> (paragraph) tag inside the <App /> component, and has an
+/* Centers the "Connect the Dots!" text, which is in a <p> (paragraph) tag inside the <PathApp /> component, and has an
 ID of "app-title". Also makes the text bigger, bold, and adds some space around the title. */
 #app-title {
     text-align: center;
